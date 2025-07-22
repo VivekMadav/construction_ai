@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# Construction AI Platform Quick Access Script
+# Usage: ./construction-ai [start|stop|status]
+
+case "$1" in
+    "start")
+        echo "🚀 Starting Construction AI Platform..."
+        ./start-platform.sh
+        ;;
+    "stop")
+        echo "🛑 Stopping Construction AI Platform..."
+        ./stop-platform.sh
+        ;;
+    "status")
+        echo "📊 Construction AI Platform Status:"
+        echo ""
+        if curl -s http://localhost:8000/health > /dev/null 2>&1; then
+            echo "✅ Backend: Running (http://localhost:8000)"
+        else
+            echo "❌ Backend: Not running"
+        fi
+        
+        if curl -s http://localhost:3000 > /dev/null 2>&1; then
+            echo "✅ Frontend: Running (http://localhost:3000)"
+        else
+            echo "❌ Frontend: Not running"
+        fi
+        ;;
+    *)
+        echo "Construction AI Platform - Quick Access"
+        echo ""
+        echo "Usage: ./construction-ai [command]"
+        echo ""
+        echo "Commands:"
+        echo "  start   - Start the platform (backend + frontend)"
+        echo "  stop    - Stop all services"
+        echo "  status  - Check if services are running"
+        echo ""
+        echo "Examples:"
+        echo "  ./construction-ai start"
+echo "  ./construction-ai stop"
+echo "  ./construction-ai status"
+        ;;
+esac 
