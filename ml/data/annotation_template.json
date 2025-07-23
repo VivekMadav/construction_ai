@@ -1,0 +1,44 @@
+{
+  "drawing_id": "arch_sample_001",
+  "discipline": "architectural",
+  "created_at": "2025-01-23T10:00:00Z",
+  "elements": [
+    {
+      "id": "wall_001",
+      "type": "wall",
+      "bbox": [100, 100, 300, 150],
+      "confidence": 0.95,
+      "properties": {
+        "thickness": "200mm",
+        "material": "concrete",
+        "height": "3.0m",
+        "length": "2.0m"
+      }
+    },
+    {
+      "id": "door_001",
+      "type": "door",
+      "bbox": [150, 100, 200, 150],
+      "confidence": 0.92,
+      "properties": {
+        "width": "900mm",
+        "height": "2.1m",
+        "type": "single_leaf",
+        "material": "timber"
+      }
+    },
+    {
+      "id": "window_001",
+      "type": "window",
+      "bbox": [400, 100, 500, 180],
+      "confidence": 0.88,
+      "properties": {
+        "width": "1.0m",
+        "height": "1.2m",
+        "type": "casement",
+        "glazing": "double_glazed"
+      }
+    }
+  ],
+  "total_elements": 3
+} 

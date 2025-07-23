@@ -1,0 +1,143 @@
+{
+  "demo_summary": {
+    "total_demos": 6,
+    "carbon_calculations": 3,
+    "comparisons": 1,
+    "environmental_equivalents": 1,
+    "optimization_recommendations": 3,
+    "compliance_checks": 5
+  },
+  "basic_analysis": {
+    "summary": {
+      "total_carbon_kg_co2e": 1923.0,
+      "carbon_intensity_kg_co2e_per_unit": 0.583,
+      "sustainability_score": 5,
+      "carbon_savings_potential_kg_co2e": 385.6
+    },
+    "material_breakdown": {
+      "concrete": 305.0,
+      "steel": 1928.0,
+      "wood": -310.0
+    },
+    "high_impact_elements": [
+      {
+        "element_type": "wall",
+        "material": "concrete",
+        "carbon_impact": 305.0,
+        "carbon_intensity": 0.1525
+      },
+      {
+        "element_type": "beam",
+        "material": "steel",
+        "carbon_impact": 1928.0,
+        "carbon_intensity": 2.41
+      }
+    ],
+    "optimization_recommendations": [
+      "Project carbon footprint exceeds commercial benchmark - consider optimization",
+      "Consider low-carbon concrete alternatives",
+      "Consider recycled steel or alternative materials"
+    ],
+    "compliance_status": {
+      "within_benchmark": false,
+      "low_carbon_compliant": false,
+      "sustainable_compliant": false,
+      "passive_house_compliant": false,
+      "intensity_acceptable": true
+    },
+    "benchmarks": {
+      "project_type_benchmark": 1200,
+      "low_carbon_benchmark": 600,
+      "sustainable_benchmark": 400
+    },
+    "report_metadata": {
+      "timestamp": "2025-07-23T15:38:44.861848",
+      "calculator_version": "1.0",
+      "database_coverage": 26
+    }
+  },
+  "high_carbon_analysis": {
+    "summary": {
+      "total_carbon_kg_co2e": 10545.0,
+      "carbon_intensity_kg_co2e_per_unit": 10.545,
+      "sustainability_score": 0,
+      "carbon_savings_potential_kg_co2e": 5272.5
+    },
+    "material_breakdown": {
+      "aluminum": 10545.0
+    },
+    "high_impact_elements": [
+      {
+        "element_type": "beam",
+        "material": "aluminum",
+        "carbon_impact": 10545.0,
+        "carbon_intensity": 10.545
+      }
+    ],
+    "optimization_recommendations": [
+      "Consider alternatives to high-carbon materials: aluminum",
+      "Project carbon footprint exceeds commercial benchmark - consider optimization",
+      "Review specifications for carbon reduction opportunities"
+    ],
+    "compliance_status": {
+      "within_benchmark": false,
+      "low_carbon_compliant": false,
+      "sustainable_compliant": false,
+      "passive_house_compliant": false,
+      "intensity_acceptable": false
+    },
+    "benchmarks": {
+      "project_type_benchmark": 1200,
+      "low_carbon_benchmark": 600,
+      "sustainable_benchmark": 400
+    },
+    "report_metadata": {
+      "timestamp": "2025-07-23T15:38:44.862399",
+      "calculator_version": "1.0",
+      "database_coverage": 26
+    }
+  },
+  "low_carbon_analysis": {
+    "summary": {
+      "total_carbon_kg_co2e": -625.0,
+      "carbon_intensity_kg_co2e_per_unit": -0.625,
+      "sustainability_score": 100,
+      "carbon_savings_potential_kg_co2e": -1825.0
+    },
+    "material_breakdown": {
+      "wood": -625.0
+    },
+    "high_impact_elements": [],
+    "optimization_recommendations": [
+      "Project shows good carbon performance - maintain current approach"
+    ],
+    "compliance_status": {
+      "within_benchmark": true,
+      "low_carbon_compliant": true,
+      "sustainable_compliant": true,
+      "passive_house_compliant": true,
+      "intensity_acceptable": true
+    },
+    "benchmarks": {
+      "project_type_benchmark": 1200,
+      "low_carbon_benchmark": 600,
+      "sustainable_benchmark": 400
+    },
+    "report_metadata": {
+      "timestamp": "2025-07-23T15:38:44.862432",
+      "calculator_version": "1.0",
+      "database_coverage": 26
+    }
+  },
+  "environmental_equivalents": {
+    "trees_planted": 87.4090909090909,
+    "car_miles": 4422.9,
+    "flight_hours": 21.366666666666667
+  },
+  "carbon_database_info": {
+    "materials_covered": 26,
+    "specifications_covered": 16,
+    "transportation_types": 5,
+    "benchmarks_available": 7
+  }
+}

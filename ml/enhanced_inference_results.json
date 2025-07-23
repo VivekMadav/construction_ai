@@ -1,0 +1,370 @@
+{
+  "detection_results": {
+    "elements": [
+      {
+        "id": "wall_000",
+        "type": "wall",
+        "bbox": [
+          97,
+          347,
+          703,
+          383
+        ],
+        "confidence": 0.85,
+        "properties": {
+          "length": 606,
+          "thickness": 36,
+          "area": 21816
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "length": 606,
+          "thickness": 36,
+          "area": 21816
+        }
+      },
+      {
+        "id": "window_001",
+        "type": "window",
+        "bbox": [
+          475,
+          106,
+          486,
+          122
+        ],
+        "confidence": 0.75,
+        "properties": {
+          "width": 11,
+          "height": 16,
+          "area": 176
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": 11,
+          "height": 16,
+          "area": 176
+        }
+      },
+      {
+        "id": "window_002",
+        "type": "window",
+        "bbox": [
+          460,
+          106,
+          473,
+          122
+        ],
+        "confidence": 0.75,
+        "properties": {
+          "width": 13,
+          "height": 16,
+          "area": 208
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": 13,
+          "height": 16,
+          "area": 208
+        }
+      },
+      {
+        "id": "window_003",
+        "type": "window",
+        "bbox": [
+          410,
+          105,
+          436,
+          122
+        ],
+        "confidence": 0.75,
+        "properties": {
+          "width": 26,
+          "height": 17,
+          "area": 442
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": 26,
+          "height": 17,
+          "area": 442
+        }
+      },
+      {
+        "id": "window_004",
+        "type": "window",
+        "bbox": [
+          527,
+          36,
+          539,
+          52
+        ],
+        "confidence": 0.75,
+        "properties": {
+          "width": 12,
+          "height": 16,
+          "area": 192
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": 12,
+          "height": 16,
+          "area": 192
+        }
+      },
+      {
+        "id": "window_005",
+        "type": "window",
+        "bbox": [
+          566,
+          35,
+          597,
+          52
+        ],
+        "confidence": 0.75,
+        "properties": {
+          "width": 31,
+          "height": 17,
+          "area": 527
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": 31,
+          "height": 17,
+          "area": 527
+        }
+      },
+      {
+        "id": "window_006",
+        "type": "window",
+        "bbox": [
+          553,
+          35,
+          564,
+          52
+        ],
+        "confidence": 0.75,
+        "properties": {
+          "width": 11,
+          "height": 17,
+          "area": 187
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": 11,
+          "height": 17,
+          "area": 187
+        }
+      },
+      {
+        "id": "window_007",
+        "type": "window",
+        "bbox": [
+          540,
+          35,
+          553,
+          52
+        ],
+        "confidence": 0.75,
+        "properties": {
+          "width": 13,
+          "height": 17,
+          "area": 221
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": 13,
+          "height": 17,
+          "area": 221
+        }
+      },
+      {
+        "id": "window_008",
+        "type": "window",
+        "bbox": [
+          500,
+          35,
+          526,
+          52
+        ],
+        "confidence": 0.75,
+        "properties": {
+          "width": 26,
+          "height": 17,
+          "area": 442
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": 26,
+          "height": 17,
+          "area": 442
+        }
+      },
+      {
+        "id": "room_009",
+        "type": "room",
+        "bbox": [
+          "0",
+          "0",
+          "800",
+          "600"
+        ],
+        "confidence": 0.7,
+        "properties": {
+          "width": "800",
+          "height": "600",
+          "area": "383167"
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": "800",
+          "height": "600",
+          "area": "383167"
+        }
+      },
+      {
+        "id": "room_010",
+        "type": "room",
+        "bbox": [
+          "52",
+          "52",
+          "349",
+          "249"
+        ],
+        "confidence": 0.7,
+        "properties": {
+          "width": "297",
+          "height": "197",
+          "area": "51058"
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": "297",
+          "height": "197",
+          "area": "51058"
+        }
+      },
+      {
+        "id": "room_011",
+        "type": "room",
+        "bbox": [
+          "403",
+          "103",
+          "448",
+          "298"
+        ],
+        "confidence": 0.7,
+        "properties": {
+          "width": "45",
+          "height": "195",
+          "area": "8439"
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": "45",
+          "height": "195",
+          "area": "8439"
+        }
+      },
+      {
+        "id": "room_012",
+        "type": "room",
+        "bbox": [
+          "103",
+          "353",
+          "698",
+          "378"
+        ],
+        "confidence": 0.7,
+        "properties": {
+          "width": "595",
+          "height": "25",
+          "area": "14358"
+        },
+        "discipline": "architectural",
+        "text_mappings": [],
+        "enhanced_properties": {
+          "width": "595",
+          "height": "25",
+          "area": "14358"
+        }
+      }
+    ],
+    "extracted_texts": [],
+    "text_analysis": {
+      "text_types": {},
+      "common_keywords": {},
+      "dimensions": [],
+      "materials": [],
+      "specifications": []
+    },
+    "total_elements": 13,
+    "total_texts": 0,
+    "discipline": "architectural",
+    "processing_method": "ocr_enhanced",
+    "enhancement_applied": true
+  },
+  "content_analysis": {
+    "element_distribution": {
+      "element_counts": {
+        "wall": 1,
+        "window": 8,
+        "room": 4
+      },
+      "total_elements": 13,
+      "unique_types": 3
+    },
+    "text_patterns": {
+      "text_types": {},
+      "common_keywords": {},
+      "dimensions": [],
+      "materials": [],
+      "specifications": []
+    },
+    "spatial_analysis": {
+      "bounding_box": [
+        "0",
+        "0",
+        "800",
+        "600"
+      ],
+      "center_of_mass": [
+        456.0769230769231,
+        149.30769230769232
+      ],
+      "spread": {
+        "width": "800",
+        "height": "600"
+      }
+    },
+    "confidence_analysis": {
+      "mean_confidence": 0.7423076923076922,
+      "median_confidence": 0.75,
+      "std_confidence": 0.03846153846153847,
+      "min_confidence": 0.7,
+      "max_confidence": 0.85,
+      "high_confidence_count": 1,
+      "medium_confidence_count": 12,
+      "low_confidence_count": 0
+    },
+    "enhancement_impact": {
+      "elements_with_text": 0,
+      "total_elements": 13,
+      "enhancement_ratio": 0.0,
+      "total_texts": 0,
+      "text_element_ratio": 0.0
+    }
+  },
+  "summary": "Drawing Analysis Summary:\n- Discipline: architectural\n- Total Elements Detected: 13\n- Unique Element Types: 3\n- Text Elements Extracted: 0\n- Average Confidence: 0.74\n- OCR Enhancement Applied: 0.0% of elements\n- Processing Method: ocr_enhanced"
+}

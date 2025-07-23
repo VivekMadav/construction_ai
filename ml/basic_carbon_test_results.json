@@ -1,0 +1,48 @@
+{
+  "summary": {
+    "total_carbon_kg_co2e": 1179.0,
+    "carbon_intensity_kg_co2e_per_unit": 0.655,
+    "sustainability_score": 6.8,
+    "carbon_savings_potential_kg_co2e": -21.0
+  },
+  "material_breakdown": {
+    "concrete": 155.0,
+    "steel": 1208.0,
+    "wood": -184.0
+  },
+  "high_impact_elements": [
+    {
+      "element_type": "wall",
+      "material": "concrete",
+      "carbon_impact": 155.0,
+      "carbon_intensity": 0.155
+    },
+    {
+      "element_type": "beam",
+      "material": "steel",
+      "carbon_impact": 1208.0,
+      "carbon_intensity": 2.416
+    }
+  ],
+  "optimization_recommendations": [
+    "Consider low-carbon concrete alternatives",
+    "Consider recycled steel or alternative materials"
+  ],
+  "compliance_status": {
+    "within_benchmark": true,
+    "low_carbon_compliant": false,
+    "sustainable_compliant": false,
+    "passive_house_compliant": false,
+    "intensity_acceptable": true
+  },
+  "benchmarks": {
+    "project_type_benchmark": 1200,
+    "low_carbon_benchmark": 600,
+    "sustainable_benchmark": 400
+  },
+  "report_metadata": {
+    "timestamp": "2025-07-23T15:34:19.471075",
+    "calculator_version": "1.0",
+    "database_coverage": 26
+  }
+}

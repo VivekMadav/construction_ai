@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, BackgroundTasks
+from fastapi import APIRouter, Depends, HTTPException, status, UploadFile, File, BackgroundTasks, Form
 from sqlalchemy.orm import Session
 from typing import List
 import os
@@ -19,6 +19,7 @@ pdf_processor = PDFProcessor()
 async def upload_drawing(
     project_id: int,
     file: UploadFile = File(...),
+    discipline: str = Form("architectural"),  # architectural, structural, civil, mep
     background_tasks: BackgroundTasks = None,
     db: Session = Depends(get_db)
 ):
@@ -60,12 +61,14 @@ async def upload_drawing(
             shutil.copyfileobj(file.file, buffer)
         
         # Create drawing record
+        print(f"DEBUG: Creating drawing with discipline: {discipline}")
         drawing = Drawing(
             project_id=project_id,
             filename=filename,
             file_path=file_path,
             file_size=file.size,
             file_type=file_extension,
+            discipline=discipline,
             processing_status="pending"
         )
         
@@ -75,7 +78,7 @@ async def upload_drawing(
         
         # Start background processing for PDF files
         if file_extension == '.pdf' and background_tasks:
-            background_tasks.add_task(process_pdf_drawing, drawing.id, file_path, db)
+            background_tasks.add_task(process_pdf_drawing, drawing.id, file_path, discipline, db)
         
         return FileUploadResponse(
             filename=filename,
@@ -94,7 +97,7 @@ async def upload_drawing(
         )
 
 
-async def process_pdf_drawing(drawing_id: int, file_path: str, db: Session):
+async def process_pdf_drawing(drawing_id: int, file_path: str, discipline: str, db: Session):
     """Background task to process PDF drawing"""
     # Create a new database session for the background task
     from ..core.database import SessionLocal
@@ -107,35 +110,37 @@ async def process_pdf_drawing(drawing_id: int, file_path: str, db: Session):
             drawing.processing_status = "processing"
             db_session.commit()
         
-        # Process the PDF
-        results = pdf_processor.process_pdf_drawing(file_path)
+        # Process the PDF with multi-head inference system
+        print(f"DEBUG: Processing PDF with discipline: {discipline}")
+        results = pdf_processor.process_pdf_drawing(file_path, discipline=discipline)
         
         # Save detected elements to database
-        if results['status'] == 'completed' and results['total_elements'] > 0:
-            for page in results['pages']:
-                for element_data in page['elements']:
-                    # Calculate bounding box as JSON string
-                    bbox = element_data['bounding_box']
-                    bounding_box_json = f'{{"x1": {bbox[0]}, "y1": {bbox[1]}, "x2": {bbox[2]}, "y2": {bbox[3]}}}'
-                    
-                    # Calculate area in square meters (assuming 100 pixels per meter)
-                    area_m2 = element_data['area'] / (100 * 100)  # Convert from pixels to m2
-                    
-                    element = Element(
-                        drawing_id=drawing_id,
-                        project_id=drawing.project_id,
-                        element_type=element_data['type'],
-                        quantity=area_m2,
-                        unit="m2",
-                        area=area_m2,
-                        confidence_score=element_data['confidence'],
-                        bounding_box=bounding_box_json
-                    )
-                    db_session.add(element)
+        if results.get('total_elements', 0) > 0:
+            for element_data in results['elements']:
+                # Calculate bounding box as JSON string
+                bbox = element_data['bbox']
+                bounding_box_json = f'{{"x1": {bbox[0]}, "y1": {bbox[1]}, "x2": {bbox[2]}, "y2": {bbox[3]}}}'
+                
+                # Calculate area in square meters (assuming 100 pixels per meter)
+                area_m2 = element_data['properties'].get('area', 0) / (100 * 100)  # Convert from pixels to m2
+                
+                element = Element(
+                    drawing_id=drawing_id,
+                    project_id=drawing.project_id,
+                    element_type=element_data['type'],
+                    quantity=area_m2,
+                    unit="m2",
+                    area=area_m2,
+                    confidence_score=element_data['confidence'],
+                    bounding_box=bounding_box_json
+                )
+                db_session.add(element)
             
             drawing.processing_status = "completed"
+            print(f"DEBUG: Successfully processed {results['total_elements']} elements using {results.get('processing_method', 'unknown')} method")
         else:
             drawing.processing_status = "failed"
+            print(f"DEBUG: No elements detected, processing failed")
         
         db_session.commit()
         

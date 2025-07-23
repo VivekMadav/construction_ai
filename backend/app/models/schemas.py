@@ -47,6 +47,7 @@ class DrawingBase(BaseModel):
 
 class DrawingCreate(DrawingBase):
     project_id: int
+    discipline: Optional[str] = "architectural"  # architectural, structural, civil, mep
 
 
 class Drawing(DrawingBase):
@@ -55,6 +56,7 @@ class Drawing(DrawingBase):
     file_path: str
     file_size: Optional[int] = None
     page_count: int = 1
+    discipline: str = "architectural"
     processing_status: str
     created_at: datetime
     

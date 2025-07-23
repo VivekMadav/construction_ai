@@ -1,0 +1,1811 @@
+{
+  "elements": [
+    {
+      "id": "window_000",
+      "type": "window",
+      "bbox": [
+        426,
+        1590,
+        443,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 17,
+        "height": 10,
+        "area": 170
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 17,
+        "height": 10,
+        "area": 170
+      }
+    },
+    {
+      "id": "window_001",
+      "type": "window",
+      "bbox": [
+        413,
+        1590,
+        425,
+        1599
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 12,
+        "height": 9,
+        "area": 108
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 12,
+        "height": 9,
+        "area": 108
+      }
+    },
+    {
+      "id": "window_002",
+      "type": "window",
+      "bbox": [
+        504,
+        1587,
+        519,
+        1599
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 15,
+        "height": 12,
+        "area": 180
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 15,
+        "height": 12,
+        "area": 180
+      }
+    },
+    {
+      "id": "window_003",
+      "type": "window",
+      "bbox": [
+        487,
+        1587,
+        499,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 12,
+        "height": 13,
+        "area": 156
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 12,
+        "height": 13,
+        "area": 156
+      }
+    },
+    {
+      "id": "window_004",
+      "type": "window",
+      "bbox": [
+        467,
+        1587,
+        486,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 19,
+        "height": 13,
+        "area": 247
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 19,
+        "height": 13,
+        "area": 247
+      }
+    },
+    {
+      "id": "window_005",
+      "type": "window",
+      "bbox": [
+        456,
+        1587,
+        466,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      }
+    },
+    {
+      "id": "window_006",
+      "type": "window",
+      "bbox": [
+        391,
+        1587,
+        401,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      }
+    },
+    {
+      "id": "window_007",
+      "type": "window",
+      "bbox": [
+        380,
+        1587,
+        390,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      }
+    },
+    {
+      "id": "window_008",
+      "type": "window",
+      "bbox": [
+        362,
+        1587,
+        371,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      }
+    },
+    {
+      "id": "window_009",
+      "type": "window",
+      "bbox": [
+        299,
+        1587,
+        308,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      }
+    },
+    {
+      "id": "window_010",
+      "type": "window",
+      "bbox": [
+        291,
+        1587,
+        299,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 8,
+        "height": 13,
+        "area": 104
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 8,
+        "height": 13,
+        "area": 104
+      }
+    },
+    {
+      "id": "window_011",
+      "type": "window",
+      "bbox": [
+        268,
+        1587,
+        280,
+        1599
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 12,
+        "height": 12,
+        "area": 144
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 12,
+        "height": 12,
+        "area": 144
+      }
+    },
+    {
+      "id": "window_012",
+      "type": "window",
+      "bbox": [
+        157,
+        1587,
+        165,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 8,
+        "height": 13,
+        "area": 104
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 8,
+        "height": 13,
+        "area": 104
+      }
+    },
+    {
+      "id": "window_013",
+      "type": "window",
+      "bbox": [
+        342,
+        1586,
+        352,
+        1599
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      }
+    },
+    {
+      "id": "window_014",
+      "type": "window",
+      "bbox": [
+        210,
+        1586,
+        228,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 18,
+        "height": 14,
+        "area": 252
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 18,
+        "height": 14,
+        "area": 252
+      }
+    },
+    {
+      "id": "window_015",
+      "type": "window",
+      "bbox": [
+        116,
+        1586,
+        125,
+        1600
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 9,
+        "height": 14,
+        "area": 126
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 9,
+        "height": 14,
+        "area": 126
+      }
+    },
+    {
+      "id": "window_016",
+      "type": "window",
+      "bbox": [
+        161,
+        1559,
+        171,
+        1570
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 11,
+        "area": 110
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 11,
+        "area": 110
+      }
+    },
+    {
+      "id": "window_017",
+      "type": "window",
+      "bbox": [
+        149,
+        1559,
+        160,
+        1571
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      }
+    },
+    {
+      "id": "window_018",
+      "type": "window",
+      "bbox": [
+        137,
+        1559,
+        148,
+        1575
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 11,
+        "height": 16,
+        "area": 176
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 11,
+        "height": 16,
+        "area": 176
+      }
+    },
+    {
+      "id": "window_019",
+      "type": "window",
+      "bbox": [
+        126,
+        1559,
+        136,
+        1571
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 12,
+        "area": 120
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 12,
+        "area": 120
+      }
+    },
+    {
+      "id": "window_020",
+      "type": "window",
+      "bbox": [
+        172,
+        1555,
+        184,
+        1571
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 12,
+        "height": 16,
+        "area": 192
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 12,
+        "height": 16,
+        "area": 192
+      }
+    },
+    {
+      "id": "window_021",
+      "type": "window",
+      "bbox": [
+        115,
+        1555,
+        125,
+        1570
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 15,
+        "area": 150
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 15,
+        "area": 150
+      }
+    },
+    {
+      "id": "window_022",
+      "type": "window",
+      "bbox": [
+        249,
+        1445,
+        271,
+        1458
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 22,
+        "height": 13,
+        "area": 286
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 22,
+        "height": 13,
+        "area": 286
+      }
+    },
+    {
+      "id": "window_023",
+      "type": "window",
+      "bbox": [
+        236,
+        1445,
+        245,
+        1458
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      }
+    },
+    {
+      "id": "window_024",
+      "type": "window",
+      "bbox": [
+        540,
+        1391,
+        553,
+        1400
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 13,
+        "height": 9,
+        "area": 117
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 13,
+        "height": 9,
+        "area": 117
+      }
+    },
+    {
+      "id": "window_025",
+      "type": "window",
+      "bbox": [
+        557,
+        1388,
+        566,
+        1401
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      }
+    },
+    {
+      "id": "window_026",
+      "type": "window",
+      "bbox": [
+        511,
+        1387,
+        521,
+        1400
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 13,
+        "area": 130
+      }
+    },
+    {
+      "id": "window_027",
+      "type": "window",
+      "bbox": [
+        286,
+        1387,
+        312,
+        1401
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 26,
+        "height": 14,
+        "area": 364
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 26,
+        "height": 14,
+        "area": 364
+      }
+    },
+    {
+      "id": "window_028",
+      "type": "window",
+      "bbox": [
+        127,
+        1105,
+        135,
+        1118
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 8,
+        "height": 13,
+        "area": 104
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 8,
+        "height": 13,
+        "area": 104
+      }
+    },
+    {
+      "id": "window_029",
+      "type": "window",
+      "bbox": [
+        113,
+        1105,
+        122,
+        1118
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 9,
+        "height": 13,
+        "area": 117
+      }
+    },
+    {
+      "id": "window_030",
+      "type": "window",
+      "bbox": [
+        351,
+        244,
+        361,
+        255
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 11,
+        "area": 110
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 11,
+        "area": 110
+      }
+    },
+    {
+      "id": "window_031",
+      "type": "window",
+      "bbox": [
+        339,
+        244,
+        350,
+        256
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      }
+    },
+    {
+      "id": "window_032",
+      "type": "window",
+      "bbox": [
+        298,
+        244,
+        309,
+        256
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      }
+    },
+    {
+      "id": "window_033",
+      "type": "window",
+      "bbox": [
+        287,
+        244,
+        297,
+        256
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 12,
+        "area": 120
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 12,
+        "area": 120
+      }
+    },
+    {
+      "id": "window_034",
+      "type": "window",
+      "bbox": [
+        243,
+        244,
+        253,
+        255
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 11,
+        "area": 110
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 11,
+        "area": 110
+      }
+    },
+    {
+      "id": "window_035",
+      "type": "window",
+      "bbox": [
+        232,
+        244,
+        242,
+        256
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 12,
+        "area": 120
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 12,
+        "area": 120
+      }
+    },
+    {
+      "id": "window_036",
+      "type": "window",
+      "bbox": [
+        220,
+        244,
+        231,
+        256
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      }
+    },
+    {
+      "id": "window_037",
+      "type": "window",
+      "bbox": [
+        176,
+        244,
+        186,
+        260
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 16,
+        "area": 160
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 16,
+        "area": 160
+      }
+    },
+    {
+      "id": "window_038",
+      "type": "window",
+      "bbox": [
+        165,
+        244,
+        175,
+        255
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 11,
+        "area": 110
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 11,
+        "area": 110
+      }
+    },
+    {
+      "id": "window_039",
+      "type": "window",
+      "bbox": [
+        135,
+        244,
+        146,
+        256
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 11,
+        "height": 12,
+        "area": 132
+      }
+    },
+    {
+      "id": "window_040",
+      "type": "window",
+      "bbox": [
+        322,
+        240,
+        334,
+        255
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 12,
+        "height": 15,
+        "area": 180
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 12,
+        "height": 15,
+        "area": 180
+      }
+    },
+    {
+      "id": "window_041",
+      "type": "window",
+      "bbox": [
+        271,
+        240,
+        282,
+        255
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 11,
+        "height": 15,
+        "area": 165
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 11,
+        "height": 15,
+        "area": 165
+      }
+    },
+    {
+      "id": "window_042",
+      "type": "window",
+      "bbox": [
+        254,
+        240,
+        264,
+        256
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 16,
+        "area": 160
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 16,
+        "area": 160
+      }
+    },
+    {
+      "id": "window_043",
+      "type": "window",
+      "bbox": [
+        198,
+        240,
+        213,
+        256
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 15,
+        "height": 16,
+        "area": 240
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 15,
+        "height": 16,
+        "area": 240
+      }
+    },
+    {
+      "id": "window_044",
+      "type": "window",
+      "bbox": [
+        146,
+        240,
+        164,
+        255
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 18,
+        "height": 15,
+        "area": 270
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 18,
+        "height": 15,
+        "area": 270
+      }
+    },
+    {
+      "id": "window_045",
+      "type": "window",
+      "bbox": [
+        115,
+        240,
+        127,
+        256
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 12,
+        "height": 16,
+        "area": 192
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 12,
+        "height": 16,
+        "area": 192
+      }
+    },
+    {
+      "id": "window_046",
+      "type": "window",
+      "bbox": [
+        153,
+        216,
+        163,
+        228
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 12,
+        "area": 120
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 12,
+        "area": 120
+      }
+    },
+    {
+      "id": "window_047",
+      "type": "window",
+      "bbox": [
+        127,
+        216,
+        136,
+        228
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 9,
+        "height": 12,
+        "area": 108
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 9,
+        "height": 12,
+        "area": 108
+      }
+    },
+    {
+      "id": "window_048",
+      "type": "window",
+      "bbox": [
+        214,
+        212,
+        224,
+        228
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 16,
+        "area": 160
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 16,
+        "area": 160
+      }
+    },
+    {
+      "id": "window_049",
+      "type": "window",
+      "bbox": [
+        203,
+        212,
+        213,
+        228
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 10,
+        "height": 16,
+        "area": 160
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 10,
+        "height": 16,
+        "area": 160
+      }
+    },
+    {
+      "id": "window_050",
+      "type": "window",
+      "bbox": [
+        137,
+        212,
+        151,
+        228
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 14,
+        "height": 16,
+        "area": 224
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 14,
+        "height": 16,
+        "area": 224
+      }
+    },
+    {
+      "id": "window_051",
+      "type": "window",
+      "bbox": [
+        114,
+        212,
+        126,
+        228
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 12,
+        "height": 16,
+        "area": 192
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 12,
+        "height": 16,
+        "area": 192
+      }
+    },
+    {
+      "id": "window_052",
+      "type": "window",
+      "bbox": [
+        630,
+        152,
+        647,
+        177
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 17,
+        "height": 25,
+        "area": 425
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 17,
+        "height": 25,
+        "area": 425
+      }
+    },
+    {
+      "id": "window_053",
+      "type": "window",
+      "bbox": [
+        611,
+        152,
+        627,
+        170
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 16,
+        "height": 18,
+        "area": 288
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 16,
+        "height": 18,
+        "area": 288
+      }
+    },
+    {
+      "id": "window_054",
+      "type": "window",
+      "bbox": [
+        545,
+        152,
+        561,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 16,
+        "height": 19,
+        "area": 304
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 16,
+        "height": 19,
+        "area": 304
+      }
+    },
+    {
+      "id": "window_055",
+      "type": "window",
+      "bbox": [
+        494,
+        152,
+        511,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 17,
+        "height": 19,
+        "area": 323
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 17,
+        "height": 19,
+        "area": 323
+      }
+    },
+    {
+      "id": "window_056",
+      "type": "window",
+      "bbox": [
+        477,
+        152,
+        493,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 16,
+        "height": 19,
+        "area": 304
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 16,
+        "height": 19,
+        "area": 304
+      }
+    },
+    {
+      "id": "window_057",
+      "type": "window",
+      "bbox": [
+        375,
+        152,
+        391,
+        170
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 16,
+        "height": 18,
+        "area": 288
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 16,
+        "height": 18,
+        "area": 288
+      }
+    },
+    {
+      "id": "window_058",
+      "type": "window",
+      "bbox": [
+        355,
+        152,
+        372,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 17,
+        "height": 19,
+        "area": 323
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 17,
+        "height": 19,
+        "area": 323
+      }
+    },
+    {
+      "id": "window_059",
+      "type": "window",
+      "bbox": [
+        305,
+        152,
+        316,
+        170
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 11,
+        "height": 18,
+        "area": 198
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 11,
+        "height": 18,
+        "area": 198
+      }
+    },
+    {
+      "id": "window_060",
+      "type": "window",
+      "bbox": [
+        285,
+        152,
+        303,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 18,
+        "height": 19,
+        "area": 342
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 18,
+        "height": 19,
+        "area": 342
+      }
+    },
+    {
+      "id": "window_061",
+      "type": "window",
+      "bbox": [
+        265,
+        152,
+        283,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 18,
+        "height": 19,
+        "area": 342
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 18,
+        "height": 19,
+        "area": 342
+      }
+    },
+    {
+      "id": "window_062",
+      "type": "window",
+      "bbox": [
+        210,
+        152,
+        227,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 17,
+        "height": 19,
+        "area": 323
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 17,
+        "height": 19,
+        "area": 323
+      }
+    },
+    {
+      "id": "window_063",
+      "type": "window",
+      "bbox": [
+        182,
+        152,
+        200,
+        177
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 18,
+        "height": 25,
+        "area": 450
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 18,
+        "height": 25,
+        "area": 450
+      }
+    },
+    {
+      "id": "window_064",
+      "type": "window",
+      "bbox": [
+        154,
+        152,
+        179,
+        170
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 25,
+        "height": 18,
+        "area": 450
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 25,
+        "height": 18,
+        "area": 450
+      }
+    },
+    {
+      "id": "window_065",
+      "type": "window",
+      "bbox": [
+        135,
+        152,
+        151,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 16,
+        "height": 19,
+        "area": 304
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 16,
+        "height": 19,
+        "area": 304
+      }
+    },
+    {
+      "id": "window_066",
+      "type": "window",
+      "bbox": [
+        581,
+        146,
+        599,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 18,
+        "height": 25,
+        "area": 450
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 18,
+        "height": 25,
+        "area": 450
+      }
+    },
+    {
+      "id": "window_067",
+      "type": "window",
+      "bbox": [
+        523,
+        146,
+        542,
+        170
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 19,
+        "height": 24,
+        "area": 456
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 19,
+        "height": 24,
+        "area": 456
+      }
+    },
+    {
+      "id": "window_068",
+      "type": "window",
+      "bbox": [
+        446,
+        146,
+        467,
+        170
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 21,
+        "height": 24,
+        "area": 504
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 21,
+        "height": 24,
+        "area": 504
+      }
+    },
+    {
+      "id": "window_069",
+      "type": "window",
+      "bbox": [
+        422,
+        146,
+        445,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 23,
+        "height": 25,
+        "area": 575
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 23,
+        "height": 25,
+        "area": 575
+      }
+    },
+    {
+      "id": "window_070",
+      "type": "window",
+      "bbox": [
+        327,
+        146,
+        346,
+        170
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 19,
+        "height": 24,
+        "area": 456
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 19,
+        "height": 24,
+        "area": 456
+      }
+    },
+    {
+      "id": "window_071",
+      "type": "window",
+      "bbox": [
+        238,
+        146,
+        255,
+        170
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 17,
+        "height": 24,
+        "area": 408
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 17,
+        "height": 24,
+        "area": 408
+      }
+    },
+    {
+      "id": "window_072",
+      "type": "window",
+      "bbox": [
+        114,
+        146,
+        134,
+        171
+      ],
+      "confidence": 0.75,
+      "properties": {
+        "width": 20,
+        "height": 25,
+        "area": 500
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": 20,
+        "height": 25,
+        "area": 500
+      }
+    },
+    {
+      "id": "room_073",
+      "type": "room",
+      "bbox": [
+        "0",
+        "0",
+        "1191",
+        "1684"
+      ],
+      "confidence": 0.7,
+      "properties": {
+        "width": "1191",
+        "height": "1684",
+        "area": "1682288"
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": "1191",
+        "height": "1684",
+        "area": "1682288"
+      }
+    },
+    {
+      "id": "room_074",
+      "type": "room",
+      "bbox": [
+        "228",
+        "892",
+        "452",
+        "1115"
+      ],
+      "confidence": 0.7,
+      "properties": {
+        "width": "224",
+        "height": "223",
+        "area": "47303"
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": "224",
+        "height": "223",
+        "area": "47303"
+      }
+    },
+    {
+      "id": "room_075",
+      "type": "room",
+      "bbox": [
+        "455",
+        "892",
+        "906",
+        "1115"
+      ],
+      "confidence": 0.7,
+      "properties": {
+        "width": "451",
+        "height": "223",
+        "area": "96635"
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": "451",
+        "height": "223",
+        "area": "96635"
+      }
+    },
+    {
+      "id": "room_076",
+      "type": "room",
+      "bbox": [
+        "228",
+        "1118",
+        "452",
+        "1342"
+      ],
+      "confidence": 0.7,
+      "properties": {
+        "width": "224",
+        "height": "224",
+        "area": "48422"
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": "224",
+        "height": "224",
+        "area": "48422"
+      }
+    },
+    {
+      "id": "room_077",
+      "type": "room",
+      "bbox": [
+        "455",
+        "1118",
+        "906",
+        "1342"
+      ],
+      "confidence": 0.7,
+      "properties": {
+        "width": "451",
+        "height": "224",
+        "area": "98623"
+      },
+      "discipline": "architectural",
+      "text_mappings": [],
+      "enhanced_properties": {
+        "width": "451",
+        "height": "224",
+        "area": "98623"
+      }
+    }
+  ],
+  "extracted_texts": [],
+  "text_analysis": {
+    "text_types": {},
+    "common_keywords": {},
+    "dimensions": [],
+    "materials": [],
+    "specifications": []
+  },
+  "total_elements": 78,
+  "total_texts": 0,
+  "discipline": "architectural",
+  "processing_method": "ocr_enhanced",
+  "enhancement_applied": true
+}

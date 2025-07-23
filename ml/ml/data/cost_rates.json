@@ -1,0 +1,252 @@
+{
+  "wall_concrete": {
+    "element_type": "wall",
+    "material": "concrete",
+    "unit": "per_sqm",
+    "base_rate": 85.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914099",
+    "specifications": {}
+  },
+  "wall_brick": {
+    "element_type": "wall",
+    "material": "brick",
+    "unit": "per_sqm",
+    "base_rate": 65.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914106",
+    "specifications": {}
+  },
+  "wall_steel": {
+    "element_type": "wall",
+    "material": "steel",
+    "unit": "per_sqm",
+    "base_rate": 120.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914108",
+    "specifications": {}
+  },
+  "column_concrete": {
+    "element_type": "column",
+    "material": "concrete",
+    "unit": "per_unit",
+    "base_rate": 450.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914111",
+    "specifications": {}
+  },
+  "column_steel": {
+    "element_type": "column",
+    "material": "steel",
+    "unit": "per_unit",
+    "base_rate": 800.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914113",
+    "specifications": {}
+  },
+  "beam_concrete": {
+    "element_type": "beam",
+    "material": "concrete",
+    "unit": "per_lm",
+    "base_rate": 180.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914116",
+    "specifications": {}
+  },
+  "beam_steel": {
+    "element_type": "beam",
+    "material": "steel",
+    "unit": "per_lm",
+    "base_rate": 320.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914118",
+    "specifications": {}
+  },
+  "slab_concrete": {
+    "element_type": "slab",
+    "material": "concrete",
+    "unit": "per_sqm",
+    "base_rate": 95.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914120",
+    "specifications": {}
+  },
+  "foundation_concrete": {
+    "element_type": "foundation",
+    "material": "concrete",
+    "unit": "per_cubic_m",
+    "base_rate": 280.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914123",
+    "specifications": {}
+  },
+  "door_timber": {
+    "element_type": "door",
+    "material": "timber",
+    "unit": "per_unit",
+    "base_rate": 350.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914125",
+    "specifications": {}
+  },
+  "door_aluminium": {
+    "element_type": "door",
+    "material": "aluminium",
+    "unit": "per_unit",
+    "base_rate": 450.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914127",
+    "specifications": {}
+  },
+  "door_steel": {
+    "element_type": "door",
+    "material": "steel",
+    "unit": "per_unit",
+    "base_rate": 600.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914129",
+    "specifications": {}
+  },
+  "window_aluminium": {
+    "element_type": "window",
+    "material": "aluminium",
+    "unit": "per_unit",
+    "base_rate": 280.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914131",
+    "specifications": {}
+  },
+  "window_timber": {
+    "element_type": "window",
+    "material": "timber",
+    "unit": "per_unit",
+    "base_rate": 320.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914134",
+    "specifications": {}
+  },
+  "window_steel": {
+    "element_type": "window",
+    "material": "steel",
+    "unit": "per_unit",
+    "base_rate": 380.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914136",
+    "specifications": {}
+  },
+  "room_finishes": {
+    "element_type": "room",
+    "material": "finishes",
+    "unit": "per_sqm",
+    "base_rate": 45.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914138",
+    "specifications": {}
+  },
+  "hvac_duct_steel": {
+    "element_type": "hvac_duct",
+    "material": "steel",
+    "unit": "per_lm",
+    "base_rate": 85.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914140",
+    "specifications": {}
+  },
+  "hvac_duct_aluminium": {
+    "element_type": "hvac_duct",
+    "material": "aluminium",
+    "unit": "per_lm",
+    "base_rate": 95.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914142",
+    "specifications": {}
+  },
+  "electrical_panel_steel": {
+    "element_type": "electrical_panel",
+    "material": "steel",
+    "unit": "per_unit",
+    "base_rate": 1200.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914144",
+    "specifications": {}
+  },
+  "plumbing_pipe_plastic": {
+    "element_type": "plumbing_pipe",
+    "material": "plastic",
+    "unit": "per_lm",
+    "base_rate": 25.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914147",
+    "specifications": {}
+  },
+  "plumbing_pipe_steel": {
+    "element_type": "plumbing_pipe",
+    "material": "steel",
+    "unit": "per_lm",
+    "base_rate": 45.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914149",
+    "specifications": {}
+  },
+  "road_asphalt": {
+    "element_type": "road",
+    "material": "asphalt",
+    "unit": "per_sqm",
+    "base_rate": 75.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914151",
+    "specifications": {}
+  },
+  "road_concrete": {
+    "element_type": "road",
+    "material": "concrete",
+    "unit": "per_sqm",
+    "base_rate": 95.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914153",
+    "specifications": {}
+  },
+  "utility_steel": {
+    "element_type": "utility",
+    "material": "steel",
+    "unit": "per_unit",
+    "base_rate": 350.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914155",
+    "specifications": {}
+  },
+  "custom_element_composite": {
+    "element_type": "custom_element",
+    "material": "composite",
+    "unit": "per_unit",
+    "base_rate": 250.0,
+    "currency": "USD",
+    "region": "global",
+    "date_updated": "2025-07-23T15:25:39.914202",
+    "specifications": {}
+  }
+}

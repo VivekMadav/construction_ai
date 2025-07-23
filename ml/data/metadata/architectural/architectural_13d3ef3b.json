@@ -1,0 +1,11 @@
+{
+  "project": "Demo Project",
+  "scale": "1:100",
+  "type": "floor_plan",
+  "drawing_id": "architectural_13d3ef3b",
+  "discipline": "architectural",
+  "original_path": "backend/uploads/sample_floor_plan.pdf",
+  "collected_at": "2025-07-23T14:52:07.268061",
+  "file_size": 2351,
+  "file_format": ".pdf"
+}

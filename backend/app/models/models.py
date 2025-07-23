@@ -38,6 +38,7 @@ class Drawing(Base):
     file_size = Column(Integer)  # in bytes
     file_type = Column(String(10))  # pdf, png, etc.
     page_count = Column(Integer, default=1)
+    discipline = Column(String(50), default="architectural")  # architectural, structural, civil, mep
     processing_status = Column(String(50), default="pending")  # pending, processing, completed, failed
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     

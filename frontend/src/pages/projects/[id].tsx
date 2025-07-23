@@ -40,6 +40,7 @@ export default function ProjectDetail() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedDiscipline, setSelectedDiscipline] = useState<string>("architectural");
   const [selectedDrawing, setSelectedDrawing] = useState<Drawing | null>(null);
   const [showElementsModal, setShowElementsModal] = useState(false);
 
@@ -52,7 +53,7 @@ export default function ProjectDetail() {
 
   const fetchProject = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/projects/${id}`);
+      const response = await fetch(`http://localhost:8000/api/v1/projects/${id}/`);
       if (response.ok) {
         const data = await response.json();
         setProject(data);
@@ -66,7 +67,7 @@ export default function ProjectDetail() {
 
   const fetchDrawings = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/drawings/project/${id}`);
+      const response = await fetch(`http://localhost:8000/api/v1/drawings/project/${id}/`);
       if (response.ok) {
         const data = await response.json();
         setDrawings(data);
@@ -91,9 +92,10 @@ export default function ProjectDetail() {
     setUploading(true);
     const formData = new FormData();
     formData.append('file', selectedFile);
+    formData.append('discipline', selectedDiscipline);
 
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/drawings/upload/${id}`, {
+      const response = await fetch(`http://localhost:8000/api/v1/drawings/upload/${id}/`, {
         method: 'POST',
         body: formData,
       });
@@ -116,7 +118,7 @@ export default function ProjectDetail() {
 
   const generateCostReport = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/analysis/project/${id}/costs`);
+      const response = await fetch(`http://localhost:8000/api/v1/analysis/project/${id}/costs/`);
       if (response.ok) {
         const data = await response.json();
         // For demo purposes, show the cost data
@@ -274,19 +276,37 @@ Generated on: ${new Date().toLocaleString()}
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
               <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
               <div className="space-y-4">
-                <div>
-                  <label htmlFor="file-upload" className="cursor-pointer">
-                    <span className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                      Select PDF Drawing
-                    </span>
-                    <input
-                      id="file-upload"
-                      type="file"
-                      accept=".pdf"
-                      onChange={handleFileSelect}
-                      className="hidden"
-                    />
-                  </label>
+                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+                  <div>
+                    <label htmlFor="file-upload" className="cursor-pointer">
+                      <span className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                        Select PDF Drawing
+                      </span>
+                      <input
+                        id="file-upload"
+                        type="file"
+                        accept=".pdf"
+                        onChange={handleFileSelect}
+                        className="hidden"
+                      />
+                    </label>
+                  </div>
+                  <div>
+                    <label htmlFor="discipline-select" className="block text-sm font-medium text-gray-700 mb-1">
+                      Drawing Discipline
+                    </label>
+                    <select
+                      id="discipline-select"
+                      value={selectedDiscipline}
+                      onChange={(e) => setSelectedDiscipline(e.target.value)}
+                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                    >
+                      <option value="architectural">Architectural</option>
+                      <option value="structural">Structural</option>
+                      <option value="civil">Civil</option>
+                      <option value="mep">Mechanical/Electrical</option>
+                    </select>
+                  </div>
                 </div>
                 {selectedFile && (
                   <div className="text-sm text-gray-600">

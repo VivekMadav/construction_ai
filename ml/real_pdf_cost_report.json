@@ -1,0 +1,1559 @@
+{
+  "project_info": {
+    "name": "Real_PDF_sample_floor_plan",
+    "analysis_timestamp": "2025-07-23T15:25:40.215729",
+    "confidence_score": 0.7487179487179486
+  },
+  "cost_summary": {
+    "total_cost": 20440.0,
+    "currency": "USD",
+    "element_count": 73,
+    "average_cost_per_element": 280.0
+  },
+  "discipline_breakdown": {
+    "structural": {
+      "count": 0,
+      "cost": 0.0,
+      "elements": []
+    },
+    "architectural": {
+      "count": 73,
+      "cost": 20440.0,
+      "elements": [
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "material": "aluminium"
+        }
+      ]
+    },
+    "mep": {
+      "count": 0,
+      "cost": 0.0,
+      "elements": []
+    },
+    "civil": {
+      "count": 0,
+      "cost": 0.0,
+      "elements": []
+    }
+  },
+  "material_analysis": {
+    "aluminium": {
+      "count": 73,
+      "total_cost": 20440.0,
+      "avg_cost": 280.0,
+      "elements": [
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "type": "window",
+          "cost": 280.0,
+          "quantity": 1.0
+        }
+      ]
+    }
+  },
+  "specification_impact": {
+    "total_specifications": 0,
+    "specification_breakdown": {},
+    "cost_impact": 0.0,
+    "most_expensive_specs": []
+  },
+  "cost_trends": {
+    "cost_distribution": {
+      "low_cost": 0,
+      "medium_cost": 73,
+      "high_cost": 0,
+      "very_high_cost": 0
+    },
+    "element_cost_ranking": [
+      [
+        "window",
+        280.0
+      ],
+      [
+        "window",
+        280.0
+      ],
+      [
+        "window",
+        280.0
+      ],
+      [
+        "window",
+        280.0
+      ],
+      [
+        "window",
+        280.0
+      ],
+      [
+        "window",
+        280.0
+      ],
+      [
+        "window",
+        280.0
+      ],
+      [
+        "window",
+        280.0
+      ],
+      [
+        "window",
+        280.0
+      ],
+      [
+        "window",
+        280.0
+      ]
+    ],
+    "cost_efficiency": {
+      "most_efficient": [
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        }
+      ],
+      "least_efficient": [
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        },
+        {
+          "element_type": "window",
+          "efficiency": 280.0,
+          "cost": 280.0,
+          "quantity": 1.0
+        }
+      ]
+    }
+  },
+  "recommendations": [
+    "High use of aluminium - consider cost-effective alternatives"
+  ],
+  "detailed_costs": [
+    {
+      "element_id": "window_000",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_001",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_002",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_003",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_004",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_005",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_006",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_007",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_008",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_009",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_010",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_011",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_012",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_013",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_014",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_015",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_016",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_017",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_018",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_019",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_020",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_021",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_022",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_023",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_024",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_025",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_026",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_027",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_028",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_029",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_030",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_031",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_032",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_033",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_034",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_035",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_036",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_037",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_038",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_039",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_040",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_041",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_042",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_043",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_044",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_045",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_046",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_047",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_048",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_049",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_050",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_051",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_052",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_053",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_054",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_055",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_056",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_057",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_058",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_059",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_060",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_061",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_062",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_063",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_064",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_065",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_066",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_067",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_068",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_069",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_070",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_071",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    },
+    {
+      "element_id": "window_072",
+      "element_type": "window",
+      "total_cost": 280.0,
+      "quantity": 1.0,
+      "unit": "per_unit",
+      "material": "aluminium",
+      "specifications": []
+    }
+  ]
+}

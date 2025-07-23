@@ -47,7 +47,7 @@ export default function Dashboard() {
   const { data: projects, isLoading, refetch } = useQuery<Project[]>(
     'projects',
     async () => {
-      const response = await axios.get('/api/v1/projects');
+      const response = await axios.get('/api/v1/projects/');
       return response.data;
     },
     {
@@ -61,8 +61,8 @@ export default function Dashboard() {
     'dashboardStats',
     async () => {
       const [projectsResponse, drawingsResponse, costResponse] = await Promise.all([
-        axios.get('/api/v1/projects'),
-        axios.get('/api/v1/drawings'),
+        axios.get('/api/v1/projects/'),
+        axios.get('/api/v1/drawings/'),
         axios.get('/api/v1/analysis/costs')
       ]);
 
@@ -114,13 +114,19 @@ export default function Dashboard() {
 
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('Creating project with data:', newProject);
     try {
-      await axios.post('/api/v1/projects', newProject);
+      const response = await axios.post('/api/v1/projects/', newProject);
+      console.log('Project created successfully:', response.data);
       setIsCreateModalOpen(false);
       setNewProject({ name: '', description: '', client_name: '', project_type: '', location: '', status: 'draft' });
       refetch();
     } catch (error) {
       console.error('Error creating project:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Response data:', error.response?.data);
+        console.error('Response status:', error.response?.status);
+      }
     }
   };
 
@@ -129,7 +135,7 @@ export default function Dashboard() {
     if (!editingProject) return;
     
     try {
-      await axios.put(`/api/v1/projects/${editingProject.id}`, {
+      await axios.put(`/api/v1/projects/${editingProject.id}/`, {
         name: editingProject.name,
         description: editingProject.description,
         client_name: editingProject.client_name,
