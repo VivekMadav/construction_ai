@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Float, DateTime, Text, ForeignKe
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from ..core.database import Base
+from datetime import datetime
 
 
 class Project(Base):
@@ -45,6 +46,8 @@ class Drawing(Base):
     # Relationships
     project = relationship("Project", back_populates="drawings")
     elements = relationship("Element", back_populates="drawing")
+    steel_elements = relationship("SteelElement", back_populates="drawing")
+    concrete_elements = relationship("ConcreteElement", back_populates="drawing")
 
 
 class Element(Base):
@@ -125,3 +128,65 @@ class CostDatabase(Base):
     
     # Relationships
     material = relationship("Material") 
+
+
+class SteelSection(Base):
+    """Steel section database for structural steel detection"""
+    __tablename__ = "steel_sections"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    section_name = Column(String, index=True, nullable=False)  # e.g., "W310x52"
+    section_type = Column(String, nullable=False)  # e.g., "W", "H", "I", "C", "L"
+    depth_mm = Column(Float)  # Depth in mm
+    width_mm = Column(Float)  # Width in mm
+    thickness_mm = Column(Float)  # Thickness in mm
+    kg_per_meter = Column(Float, nullable=False)  # Mass per meter in kg
+    area_mm2 = Column(Float)  # Cross-sectional area in mm²
+    inertia_mm4 = Column(Float)  # Moment of inertia in mm⁴
+    description = Column(String)  # Additional description
+    created_at = Column(DateTime, default=datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class SteelElement(Base):
+    """Detected steel elements with mass calculations"""
+    __tablename__ = "steel_elements"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    drawing_id = Column(Integer, ForeignKey("drawings.id"), nullable=False)
+    element_type = Column(String, nullable=False)  # e.g., "beam", "column", "truss"
+    section_name = Column(String, nullable=False)  # e.g., "W310x52"
+    section_type = Column(String, nullable=False)  # e.g., "W", "H", "I"
+    length_mm = Column(Float)  # Length in mm
+    mass_kg = Column(Float)  # Calculated mass in kg
+    confidence_score = Column(Float, default=0.0)
+    bbox = Column(String)  # JSON string of bounding box
+    text_references = Column(String)  # JSON string of associated text
+    properties = Column(String)  # JSON string of additional properties
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationship
+    drawing = relationship("Drawing", back_populates="steel_elements")
+
+
+class ConcreteElement(Base):
+    """Detected concrete elements with volume measurements"""
+    __tablename__ = "concrete_elements"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    drawing_id = Column(Integer, ForeignKey("drawings.id"), nullable=False)
+    element_type = Column(String, nullable=False)  # foundation, slab, wall, column, beam, etc.
+    concrete_grade = Column(String, nullable=False, default="C25")  # C25, C30, C40, etc.
+    length_m = Column(Float, nullable=False)  # Length in meters
+    width_m = Column(Float, nullable=False)   # Width in meters
+    depth_m = Column(Float, nullable=False)   # Depth/thickness in meters
+    volume_m3 = Column(Float, nullable=False) # Volume in cubic meters
+    confidence_score = Column(Float, default=0.0)
+    location = Column(String)  # Optional location description
+    description = Column(Text)  # Additional description
+    text_references = Column(String)  # JSON string of associated text
+    bbox = Column(String)  # JSON string of bounding box
+    properties = Column(String)  # JSON string of additional properties
+    created_at = Column(DateTime, default=datetime.utcnow)
+    
+    # Relationship
+    drawing = relationship("Drawing", back_populates="concrete_elements") 

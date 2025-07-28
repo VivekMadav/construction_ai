@@ -2,6 +2,9 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  experimental: {
+    appDir: false, // Explicitly disable App Router
+  },
   images: {
     domains: ['localhost'],
   },

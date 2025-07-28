@@ -142,6 +142,48 @@ async def process_pdf_drawing(drawing_id: int, file_path: str, discipline: str, 
             drawing.processing_status = "failed"
             print(f"DEBUG: No elements detected, processing failed")
         
+        # If this is a structural drawing, also detect steel elements
+        if discipline == "structural":
+            try:
+                print(f"DEBUG: Detecting steel elements for structural drawing {drawing_id}")
+                from ..services.steel_database import SteelDatabaseService
+                steel_service = SteelDatabaseService(db_session)
+                steel_elements = steel_service.detect_steel_elements_in_drawing(file_path, drawing_id)
+                print(f"DEBUG: Detected {len(steel_elements)} steel elements")
+            except Exception as steel_error:
+                print(f"DEBUG: Steel detection failed: {steel_error}")
+        
+        # Automatically detect concrete elements for all drawings
+        try:
+            print(f"DEBUG: Detecting concrete elements for drawing {drawing_id}")
+            from ..services.concrete_processor import ConcreteProcessor
+            concrete_processor = ConcreteProcessor()
+            concrete_elements = concrete_processor.process_drawing_for_concrete(file_path)
+            
+            # Save concrete elements to database
+            if concrete_elements:
+                from ..models.models import ConcreteElement
+                for element in concrete_elements:
+                    db_concrete_element = ConcreteElement(
+                        drawing_id=drawing_id,
+                        element_type=element.element_type,
+                        concrete_grade=element.grade,
+                        length_m=element.dimensions.length,
+                        width_m=element.dimensions.width,
+                        depth_m=element.dimensions.depth,
+                        volume_m3=element.dimensions.volume,
+                        confidence_score=element.dimensions.confidence,
+                        description=element.description,
+                        text_references=element.dimensions.text_reference,
+                        location=element.location
+                    )
+                    db_session.add(db_concrete_element)
+                print(f"DEBUG: Detected {len(concrete_elements)} concrete elements")
+            else:
+                print(f"DEBUG: No concrete elements detected")
+        except Exception as concrete_error:
+            print(f"DEBUG: Concrete detection failed: {concrete_error}")
+        
         db_session.commit()
         
     except Exception as e:
@@ -233,11 +275,23 @@ async def delete_drawing(
                 detail="Drawing not found"
             )
         
+        # Delete related elements first
+        from ..models.models import Element, SteelElement, ConcreteElement
+        
+        # Delete regular elements
+        db.query(Element).filter(Element.drawing_id == drawing_id).delete()
+        
+        # Delete steel elements
+        db.query(SteelElement).filter(SteelElement.drawing_id == drawing_id).delete()
+        
+        # Delete concrete elements
+        db.query(ConcreteElement).filter(ConcreteElement.drawing_id == drawing_id).delete()
+        
         # Delete file from filesystem
         if os.path.exists(drawing.file_path):
             os.remove(drawing.file_path)
         
-        # Delete from database
+        # Delete the drawing
         db.delete(drawing)
         db.commit()
         return None

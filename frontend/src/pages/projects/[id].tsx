@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
-import { ArrowLeft, Upload, FileText, Calculator, Download } from 'lucide-react';
+import { ArrowLeft, Upload, FileText, Calculator, Download, Building, HardHat, Wrench, Zap } from 'lucide-react';
 
 interface Project {
   id: number;
@@ -24,13 +24,76 @@ interface Element {
   confidence_score: number;
 }
 
+interface SteelElement {
+  id: number;
+  element_type: string;
+  section_name: string;
+  section_type: string;
+  length_mm?: number;
+  mass_kg?: number;
+  confidence_score: number;
+}
+
+interface ConcreteElement {
+  id: number;
+  element_type: string;
+  concrete_grade: string;
+  length_m: number;
+  width_m: number;
+  depth_m: number;
+  volume_m3: number;
+  confidence_score: number;
+  location?: string;
+  description?: string;
+}
+
 interface Drawing {
   id: number;
   filename: string;
   created_at: string;
   processing_status: string;
+  discipline: string;
   elements?: Element[];
 }
+
+interface DisciplineSection {
+  name: string;
+  key: string;
+  icon: React.ReactNode;
+  color: string;
+  description: string;
+}
+
+const DISCIPLINES: DisciplineSection[] = [
+  {
+    name: "Structural",
+    key: "structural",
+    icon: <HardHat className="w-6 h-6" />,
+    color: "bg-red-50 border-red-200",
+    description: "Beams, columns, slabs, foundations, reinforcement details"
+  },
+  {
+    name: "Architectural", 
+    key: "architectural",
+    icon: <Building className="w-6 h-6" />,
+    color: "bg-blue-50 border-blue-200",
+    description: "Floor plans, elevations, sections, room layouts"
+  },
+  {
+    name: "Civil",
+    key: "civil", 
+    icon: <FileText className="w-6 h-6" />,
+    color: "bg-green-50 border-green-200",
+    description: "Site plans, drainage, roads, landscaping"
+  },
+  {
+    name: "MEP",
+    key: "mep",
+    icon: <Zap className="w-6 h-6" />,
+    color: "bg-purple-50 border-purple-200",
+    description: "Mechanical, electrical, plumbing systems"
+  }
+];
 
 export default function ProjectDetail() {
   const router = useRouter();
@@ -38,11 +101,14 @@ export default function ProjectDetail() {
   const [project, setProject] = useState<Project | null>(null);
   const [drawings, setDrawings] = useState<Drawing[]>([]);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedDiscipline, setSelectedDiscipline] = useState<string>("architectural");
+  const [uploading, setUploading] = useState<string | null>(null);
+  const [selectedFiles, setSelectedFiles] = useState<{ [key: string]: File | null }>({});
   const [selectedDrawing, setSelectedDrawing] = useState<Drawing | null>(null);
   const [showElementsModal, setShowElementsModal] = useState(false);
+  const [steelElements, setSteelElements] = useState<SteelElement[]>([]);
+  const [loadingSteelElements, setLoadingSteelElements] = useState(false);
+  const [concreteElements, setConcreteElements] = useState<ConcreteElement[]>([]);
+  const [loadingConcreteElements, setLoadingConcreteElements] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -77,22 +143,23 @@ export default function ProjectDetail() {
     }
   };
 
-  const handleFileSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileSelect = (discipline: string, event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file && file.type === 'application/pdf') {
-      setSelectedFile(file);
+      setSelectedFiles(prev => ({ ...prev, [discipline]: file }));
     } else {
       alert('Please select a PDF file');
     }
   };
 
-  const handleUpload = async () => {
-    if (!selectedFile) return;
+  const handleUpload = async (discipline: string) => {
+    const file = selectedFiles[discipline];
+    if (!file) return;
 
-    setUploading(true);
+    setUploading(discipline);
     const formData = new FormData();
-    formData.append('file', selectedFile);
-    formData.append('discipline', selectedDiscipline);
+    formData.append('file', file);
+    formData.append('discipline', discipline);
 
     try {
       const response = await fetch(`http://localhost:8000/api/v1/drawings/upload/${id}/`, {
@@ -101,10 +168,9 @@ export default function ProjectDetail() {
       });
 
       if (response.ok) {
-        const data = await response.json();
-        alert('Drawing uploaded successfully!');
-        setSelectedFile(null);
-        fetchDrawings(); // Refresh drawings list
+        setSelectedFiles(prev => ({ ...prev, [discipline]: null }));
+        fetchDrawings();
+        alert(`${discipline.charAt(0).toUpperCase() + discipline.slice(1)} drawing uploaded successfully!`);
       } else {
         alert('Upload failed. Please try again.');
       }
@@ -112,17 +178,23 @@ export default function ProjectDetail() {
       console.error('Upload error:', error);
       alert('Upload failed. Please try again.');
     } finally {
-      setUploading(false);
+      setUploading(null);
     }
   };
 
-  const generateCostReport = async () => {
+  const generateCostReport = async (drawingId: number) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/v1/analysis/project/${id}/costs/`);
+      const response = await fetch(`http://localhost:8000/api/v1/analysis/drawing/${drawingId}/costs/`);
       if (response.ok) {
-        const data = await response.json();
-        // For demo purposes, show the cost data
-        alert(`Cost Analysis Generated!\n\nTotal Cost: £${data.total_cost}\nMaterials: £${data.materials_cost}\nLabor: £${data.labor_cost}\nEquipment: £${data.equipment_cost}\nOverhead: £${data.overhead_cost}`);
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `cost-report-${drawingId}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
       }
     } catch (error) {
       console.error('Error generating cost report:', error);
@@ -130,361 +202,492 @@ export default function ProjectDetail() {
     }
   };
 
-  const viewElements = (drawing: Drawing) => {
+  const viewElements = async (drawing: Drawing) => {
     setSelectedDrawing(drawing);
     setShowElementsModal(true);
+    
+    // Fetch steel elements for all drawings
+    setLoadingSteelElements(true);
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/steel/elements/drawing/${drawing.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setSteelElements(data.elements || data);
+      }
+    } catch (error) {
+      console.error('Error fetching steel elements:', error);
+    } finally {
+      setLoadingSteelElements(false);
+    }
+    
+    // Fetch concrete elements for all drawings
+    setLoadingConcreteElements(true);
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/concrete/elements/drawing/${drawing.id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setConcreteElements(data.elements || []);
+      }
+    } catch (error) {
+      console.error('Error fetching concrete elements:', error);
+    } finally {
+      setLoadingConcreteElements(false);
+    }
   };
 
   const downloadReport = async (drawing: Drawing) => {
     try {
-      // For demo purposes, create a simple report
-      const reportContent = `
-Construction AI Platform - Drawing Analysis Report
-
-Drawing: ${drawing.filename}
-Upload Date: ${drawing.created_at}
-Status: ${drawing.processing_status}
-
-Detected Elements:
-${drawing.elements?.map(element => 
-  `- ${element.element_type}: ${element.quantity} ${element.unit} (Confidence: ${(element.confidence_score * 100).toFixed(0)}%)`
-).join('\n') || 'No elements detected'}
-
-Generated on: ${new Date().toLocaleString()}
-      `;
-      
-      // Create and download file
-      const blob = new Blob([reportContent], { type: 'text/plain' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${drawing.filename.replace('.pdf', '')}_analysis_report.txt`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
-      
-      alert('Report downloaded successfully!');
+      const response = await fetch(`http://localhost:8000/api/v1/analysis/drawing/${drawing.id}/report/`);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `drawing-report-${drawing.id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      }
     } catch (error) {
       console.error('Error downloading report:', error);
       alert('Failed to download report');
     }
   };
 
+  const deleteDrawing = async (drawing: Drawing) => {
+    const message = drawing.processing_status === 'failed' 
+      ? `Remove failed upload "${drawing.filename}"? This will delete the file permanently.`
+      : `Are you sure you want to delete "${drawing.filename}"? This action cannot be undone.`;
+    
+    if (!confirm(message)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/drawings/${drawing.id}`, {
+        method: 'DELETE'
+      });
+      
+      if (response.ok) {
+        const successMessage = drawing.processing_status === 'failed' 
+          ? 'Failed upload removed successfully'
+          : 'Drawing deleted successfully';
+        alert(successMessage);
+        // Refresh the drawings list
+        fetchDrawings();
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to delete drawing: ${errorData.detail || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error deleting drawing:', error);
+      alert('Failed to delete drawing');
+    }
+  };
+
+  const retryDrawing = async (drawing: Drawing) => {
+    if (!confirm(`Retry processing "${drawing.filename}"?`)) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/v1/drawings/${drawing.id}/reprocess`, {
+        method: 'POST'
+      });
+      
+      if (response.ok) {
+        alert('Drawing reprocessing started. Please wait a moment and refresh the page.');
+        // Refresh the drawings list after a short delay
+        setTimeout(() => {
+          fetchDrawings();
+        }, 2000);
+      } else {
+        const errorData = await response.json();
+        alert(`Failed to retry processing: ${errorData.detail || 'Unknown error'}`);
+      }
+    } catch (error) {
+      console.error('Error retrying drawing:', error);
+      alert('Failed to retry processing');
+    }
+  };
+
+
+
+  const getDrawingsByDiscipline = (discipline: string) => {
+    return drawings.filter(drawing => drawing.discipline === discipline);
+  };
+
+  const getDisciplineStats = (discipline: string) => {
+    const disciplineDrawings = getDrawingsByDiscipline(discipline);
+    const totalElements = disciplineDrawings.reduce((sum, drawing) => 
+      sum + (drawing.elements?.length || 0), 0);
+    const completedDrawings = disciplineDrawings.filter(d => d.processing_status === 'completed').length;
+    
+    return {
+      totalDrawings: disciplineDrawings.length,
+      completedDrawings,
+      totalElements,
+      pendingDrawings: disciplineDrawings.filter(d => d.processing_status === 'pending').length,
+      failedDrawings: disciplineDrawings.filter(d => d.processing_status === 'failed').length
+    };
+  };
+
   if (loading) {
     return (
-      <>
-        <Head>
-          <title>Loading Project - Construction AI Platform</title>
-        </Head>
-        <div className="min-h-screen bg-gray-50 p-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="animate-pulse">
-              <div className="h-8 bg-gray-200 rounded w-1/4 mb-4"></div>
-              <div className="h-64 bg-gray-200 rounded"></div>
-            </div>
-          </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading project...</p>
         </div>
-      </>
+      </div>
     );
   }
 
   if (!project) {
     return (
-      <>
-        <Head>
-                      <title>Project Not Found - Construction AI Platform</title>
-        </Head>
-        <div className="min-h-screen bg-gray-50 p-8">
-          <div className="max-w-6xl mx-auto">
-            <div className="text-center">
-              <h1 className="text-2xl font-bold text-gray-900 mb-4">Project Not Found</h1>
-              <button
-                onClick={() => router.push('/')}
-                className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-              >
-                Back to Dashboard
-              </button>
-            </div>
-          </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Project not found</p>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
     <>
       <Head>
-                    <title>{project.name} - Construction AI Platform</title>
+        <title>{project.name} - Construction AI</title>
       </Head>
+
       <div className="min-h-screen bg-gray-50">
-        <div className="max-w-6xl mx-auto p-8">
-          {/* Header */}
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => router.push('/')}
-                className="p-2 hover:bg-gray-200 rounded-lg transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">{project.name}</h1>
-                <p className="text-gray-600">{project.description}</p>
-              </div>
-            </div>
-            <div className="flex space-x-3">
-              <button
-                onClick={generateCostReport}
-                className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 flex items-center space-x-2"
-              >
-                <Calculator className="w-4 h-4" />
-                <span>Generate Cost Report</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Project Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Client</h3>
-              <p className="text-lg font-semibold text-gray-900">{project.client_name}</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Type</h3>
-              <p className="text-lg font-semibold text-gray-900 capitalize">{project.project_type}</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Location</h3>
-              <p className="text-lg font-semibold text-gray-900">{project.location}</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">Status</h3>
-              <span className={`inline-flex px-2 py-1 text-sm font-medium rounded-full ${
-                project.status === 'active' ? 'bg-green-100 text-green-800' :
-                project.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                'bg-gray-100 text-gray-800'
-              }`}>
-                {project.status}
-              </span>
-            </div>
-          </div>
-
-          {/* Upload Section */}
-          <div className="bg-white p-6 rounded-lg shadow-sm mb-8">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Upload Drawing</h2>
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-              <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-              <div className="space-y-4">
-                <div className="flex flex-col sm:flex-row gap-4 items-center justify-center">
-                  <div>
-                    <label htmlFor="file-upload" className="cursor-pointer">
-                      <span className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                        Select PDF Drawing
-                      </span>
-                      <input
-                        id="file-upload"
-                        type="file"
-                        accept=".pdf"
-                        onChange={handleFileSelect}
-                        className="hidden"
-                      />
-                    </label>
-                  </div>
-                  <div>
-                    <label htmlFor="discipline-select" className="block text-sm font-medium text-gray-700 mb-1">
-                      Drawing Discipline
-                    </label>
-                    <select
-                      id="discipline-select"
-                      value={selectedDiscipline}
-                      onChange={(e) => setSelectedDiscipline(e.target.value)}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                    >
-                      <option value="architectural">Architectural</option>
-                      <option value="structural">Structural</option>
-                      <option value="civil">Civil</option>
-                      <option value="mep">Mechanical/Electrical</option>
-                    </select>
-                  </div>
+        {/* Header */}
+        <div className="bg-white shadow-sm border-b">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center justify-between h-16">
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => router.push('/')}
+                  className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                >
+                  <ArrowLeft className="w-5 h-5 text-gray-600" />
+                </button>
+                <div>
+                  <h1 className="text-xl font-semibold text-gray-900">{project.name}</h1>
+                  <p className="text-sm text-gray-500">{project.client_name} • {project.project_type}</p>
                 </div>
-                {selectedFile && (
-                  <div className="text-sm text-gray-600">
-                    Selected: {selectedFile.name}
-                    <button
-                      onClick={handleUpload}
-                      disabled={uploading}
-                      className="ml-4 bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 disabled:opacity-50"
-                    >
-                      {uploading ? 'Uploading...' : 'Upload'}
-                    </button>
-                  </div>
-                )}
-                <p className="text-sm text-gray-500">
-                  Upload construction drawings in PDF format for automatic element detection
-                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  project.status === 'active' ? 'bg-green-100 text-green-800' :
+                  project.status === 'completed' ? 'bg-blue-100 text-blue-800' :
+                  'bg-gray-100 text-gray-800'
+                }`}>
+                  {project.status}
+                </span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Drawings List */}
-          <div className="bg-white rounded-lg shadow-sm">
-            <div className="p-6 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900">Drawings</h2>
-            </div>
-            {drawings.length === 0 ? (
-              <div className="p-8 text-center text-gray-500">
-                <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                <p>No drawings uploaded yet</p>
-                <p className="text-sm">Upload a PDF drawing to get started</p>
+        {/* Main Content */}
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Project Overview */}
+          <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Project Overview</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div>
+                <p className="text-sm text-gray-500">Location</p>
+                <p className="font-medium">{project.location || 'Not specified'}</p>
               </div>
-            ) : (
-              <div className="divide-y divide-gray-200">
-                {drawings.map((drawing) => (
-                  <div key={drawing.id} className="p-6">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-4">
-                        <FileText className="w-8 h-8 text-blue-600" />
-                        <div>
-                          <h3 className="font-medium text-gray-900">{drawing.filename}</h3>
-                          <p className="text-sm text-gray-500">Uploaded: {drawing.created_at}</p>
-                          <p className="text-sm text-gray-500">Status: {drawing.processing_status}</p>
-                        </div>
-                      </div>
-                                           <div className="flex space-x-2">
-                       <button 
-                         onClick={() => viewElements(drawing)}
-                         className="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                       >
-                         View Elements
-                       </button>
-                       <button 
-                         onClick={() => downloadReport(drawing)}
-                         className="text-green-600 hover:text-green-800 text-sm font-medium"
-                       >
-                         <Download className="w-4 h-4 inline mr-1" />
-                         Download Report
-                       </button>
-                     </div>
-                    </div>
-                    {drawing.elements && drawing.elements.length > 0 && (
-                      <div className="mt-4 pl-12">
-                        <h4 className="text-sm font-medium text-gray-700 mb-2">Detected Elements:</h4>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                          {drawing.elements.map((element) => (
-                            <div key={element.id} className="bg-gray-50 p-3 rounded">
-                              <p className="text-sm font-medium capitalize">{element.element_type}</p>
-                              <p className="text-xs text-gray-600">
-                                {element.quantity} {element.unit}
-                              </p>
-                              <p className="text-xs text-gray-500">
-                                Confidence: {(element.confidence_score * 100).toFixed(0)}%
-                              </p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
+              <div>
+                <p className="text-sm text-gray-500">Total Area</p>
+                <p className="font-medium">{project.total_area ? `${project.total_area} m²` : 'Not specified'}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-500">Created</p>
+                <p className="font-medium">{new Date(project.created_at).toLocaleDateString()}</p>
+              </div>
+            </div>
+            {project.description && (
+              <div className="mt-4">
+                <p className="text-sm text-gray-500">Description</p>
+                <p className="text-gray-700">{project.description}</p>
               </div>
             )}
           </div>
-        </div>
-      </div>
 
-      {/* Elements Modal */}
-      {showElementsModal && selectedDrawing && (
-        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-          <div className="relative top-20 mx-auto p-5 border w-11/12 max-w-4xl shadow-lg rounded-md bg-white">
-            <div className="mt-3">
-              <div className="flex justify-between items-center mb-4">
-                <h3 className="text-lg font-medium text-gray-900">
-                  Detected Elements - {selectedDrawing.filename}
-                </h3>
-                <button
-                  onClick={() => setShowElementsModal(false)}
-                  className="text-gray-400 hover:text-gray-600"
-                >
-                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
+          {/* Discipline Sections */}
+          <div className="space-y-8">
+            {DISCIPLINES.map((discipline) => {
+              const stats = getDisciplineStats(discipline.key);
+              const disciplineDrawings = getDrawingsByDiscipline(discipline.key);
               
-              {selectedDrawing.elements && selectedDrawing.elements.length > 0 ? (
-                <div className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {selectedDrawing.elements.map((element) => (
-                      <div key={element.id} className="bg-gray-50 p-4 rounded-lg border">
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-medium text-gray-900 capitalize">
-                            {element.element_type}
-                          </h4>
-                          <span className={`px-2 py-1 text-xs font-medium rounded-full ${
-                            element.confidence_score > 0.8 ? 'bg-green-100 text-green-800' :
-                            element.confidence_score > 0.6 ? 'bg-yellow-100 text-yellow-800' :
-                            'bg-red-100 text-red-800'
-                          }`}>
-                            {(element.confidence_score * 100).toFixed(0)}%
-                          </span>
+              return (
+                <div key={discipline.key} className={`border rounded-lg ${discipline.color}`}>
+                  {/* Discipline Header */}
+                  <div className="p-6 border-b border-gray-200">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="p-2 bg-white rounded-lg shadow-sm">
+                          {discipline.icon}
                         </div>
-                        <div className="space-y-1 text-sm text-gray-600">
-                          <p><strong>Quantity:</strong> {element.quantity} {element.unit}</p>
-                          {element.area && <p><strong>Area:</strong> {element.area} m²</p>}
+                        <div>
+                          <h3 className="text-lg font-semibold text-gray-900">{discipline.name} Drawings</h3>
+                          <p className="text-sm text-gray-600">{discipline.description}</p>
                         </div>
                       </div>
-                    ))}
-                  </div>
-                  
-                  <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-                    <h4 className="font-medium text-blue-900 mb-2">Summary</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
-                      <div>
-                        <p className="text-blue-600">Total Elements</p>
-                        <p className="font-medium">{selectedDrawing.elements.length}</p>
-                      </div>
-                      <div>
-                        <p className="text-blue-600">High Confidence</p>
-                        <p className="font-medium">
-                          {selectedDrawing.elements.filter(e => e.confidence_score > 0.8).length}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-blue-600">Medium Confidence</p>
-                        <p className="font-medium">
-                          {selectedDrawing.elements.filter(e => e.confidence_score > 0.6 && e.confidence_score <= 0.8).length}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-blue-600">Low Confidence</p>
-                        <p className="font-medium">
-                          {selectedDrawing.elements.filter(e => e.confidence_score <= 0.6).length}
-                        </p>
+                      <div className="flex items-center space-x-4 text-sm">
+                        <div className="text-center">
+                          <p className="font-semibold text-gray-900">{stats.totalDrawings}</p>
+                          <p className="text-gray-500">Drawings</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="font-semibold text-gray-900">{stats.totalElements}</p>
+                          <p className="text-gray-500">Elements</p>
+                        </div>
+                        <div className="text-center">
+                          <p className="font-semibold text-green-600">{stats.completedDrawings}</p>
+                          <p className="text-gray-500">Completed</p>
+                        </div>
                       </div>
                     </div>
                   </div>
+
+                  {/* Upload Section */}
+                  <div className="p-6 border-b border-gray-200">
+                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
+                      <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                      <h4 className="text-lg font-medium text-gray-900 mb-2">Upload {discipline.name} Drawing</h4>
+                      <p className="text-sm text-gray-500 mb-4">
+                        Upload construction drawings in PDF format for automatic element detection
+                      </p>
+                      <div className="flex items-center justify-center space-x-4">
+                        <label htmlFor={`file-upload-${discipline.key}`} className="cursor-pointer">
+                          <span className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                            Select PDF Drawing
+                          </span>
+                          <input
+                            id={`file-upload-${discipline.key}`}
+                            type="file"
+                            accept=".pdf"
+                            onChange={(e) => handleFileSelect(discipline.key, e)}
+                            className="hidden"
+                          />
+                        </label>
+                        {selectedFiles[discipline.key] && (
+                          <div className="flex items-center space-x-2">
+                            <span className="text-sm text-gray-600">
+                              Selected: {selectedFiles[discipline.key]?.name}
+                            </span>
+                            <button
+                              onClick={() => handleUpload(discipline.key)}
+                              disabled={uploading === discipline.key}
+                              className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 disabled:opacity-50 transition-colors"
+                            >
+                              {uploading === discipline.key ? 'Uploading...' : 'Upload'}
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Drawings List */}
+                  <div className="p-6">
+                    <h4 className="text-md font-semibold text-gray-900 mb-4">Uploaded Drawings</h4>
+                    {disciplineDrawings.length === 0 ? (
+                      <div className="text-center py-8 text-gray-500">
+                        <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                        <p>No {discipline.name.toLowerCase()} drawings uploaded yet</p>
+                        <p className="text-sm">Upload your first drawing to get started</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {disciplineDrawings.map((drawing) => (
+                          <div key={drawing.id} className="bg-white rounded-lg border p-4 flex items-center justify-between">
+                            <div className="flex items-center space-x-3">
+                              <FileText className="w-5 h-5 text-gray-400" />
+                              <div>
+                                <p className="font-medium text-gray-900">{drawing.filename}</p>
+                                <p className="text-sm text-gray-500">
+                                  Uploaded {new Date(drawing.created_at).toLocaleDateString()}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                              <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                                drawing.processing_status === 'completed' ? 'bg-green-100 text-green-800' :
+                                drawing.processing_status === 'processing' ? 'bg-yellow-100 text-yellow-800' :
+                                drawing.processing_status === 'failed' ? 'bg-red-100 text-red-800' :
+                                'bg-gray-100 text-gray-800'
+                              }`}>
+                                {drawing.processing_status}
+                              </span>
+                              {drawing.processing_status === 'completed' && (
+                                <>
+                                  <button
+                                    onClick={() => viewElements(drawing)}
+                                    className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors"
+                                  >
+                                    View Elements
+                                  </button>
+                                  <button
+                                    onClick={() => generateCostReport(drawing.id)}
+                                    className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition-colors"
+                                  >
+                                    Cost Report
+                                  </button>
+                                  <button
+                                    onClick={() => downloadReport(drawing)}
+                                    className="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700 transition-colors"
+                                  >
+                                    Download Report
+                                  </button>
+                                  <button
+                                    onClick={() => deleteDrawing(drawing)}
+                                    className="text-gray-500 hover:text-red-600 transition-colors p-1"
+                                    title="Delete drawing"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                    </svg>
+                                  </button>
+                                </>
+                              )}
+                              {drawing.processing_status === 'failed' && (
+                                <>
+                                  <button
+                                    onClick={() => retryDrawing(drawing)}
+                                    className="bg-orange-600 text-white px-3 py-1 rounded text-sm hover:bg-orange-700 transition-colors"
+                                    title="Retry processing"
+                                  >
+                                    Retry
+                                  </button>
+                                  <button
+                                    onClick={() => deleteDrawing(drawing)}
+                                    className="text-red-500 hover:text-red-700 transition-colors p-1"
+                                    title="Remove failed upload"
+                                  >
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                                      <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                    </svg>
+                                  </button>
+                                </>
+                              )}
+                              {drawing.processing_status === 'processing' && (
+                                <div className="flex items-center space-x-2">
+                                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                                  <span className="text-sm text-gray-500">Processing...</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              ) : (
-                <div className="text-center py-8">
-                  <FileText className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                  <p className="text-gray-500">No elements detected yet</p>
-                  <p className="text-sm text-gray-400">The drawing is still being processed</p>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Elements Modal */}
+        {showElementsModal && selectedDrawing && (
+          <div className="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+            <div className="relative top-20 mx-auto p-5 border w-11/12 md:w-3/4 lg:w-1/2 shadow-lg rounded-md bg-white">
+              <div className="mt-3">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Elements in {selectedDrawing.filename}
+                  </h3>
+                  <button
+                    onClick={() => setShowElementsModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    ✕
+                  </button>
                 </div>
-              )}
-              
-              <div className="flex justify-end mt-6">
-                <button
-                  onClick={() => setShowElementsModal(false)}
-                  className="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700"
-                >
-                  Close
-                </button>
+
+
+                {/* Steel Elements Section */}
+                <div className="mb-6">
+                  <h4 className="text-md font-medium text-gray-900 mb-3">Steel Elements</h4>
+                  {loadingSteelElements ? (
+                    <div className="text-center py-4">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mx-auto"></div>
+                      <p className="mt-2 text-gray-500">Loading steel elements...</p>
+                    </div>
+                  ) : steelElements.length > 0 ? (
+                    <div className="space-y-3">
+                      {steelElements.map((element, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-200">
+                          <div>
+                            <p className="font-medium text-gray-900">{element.element_type}</p>
+                            <p className="text-sm text-gray-500">
+                              {element.section_name} ({element.section_type})
+                              {element.length_mm && ` • ${element.length_mm}mm`}
+                              {element.mass_kg && ` • ${element.mass_kg.toFixed(2)} kg`}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-medium text-gray-900">
+                              {Math.round(element.confidence_score * 100)}%
+                            </p>
+                            <p className="text-xs text-gray-500">Confidence</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-500">No steel elements detected in this drawing.</p>
+                  )}
+                </div>
+
+                {/* Concrete Elements Section */}
+                <div className="mb-6">
+                  <h4 className="text-md font-medium text-gray-900 mb-3">Concrete Elements</h4>
+                  {loadingConcreteElements ? (
+                    <div className="text-center py-4">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-orange-600 mx-auto"></div>
+                      <p className="mt-2 text-gray-500">Loading concrete elements...</p>
+                    </div>
+                  ) : concreteElements.length > 0 ? (
+                    <div className="space-y-3">
+                      {concreteElements.map((element, index) => (
+                        <div key={index} className="flex items-center justify-between p-3 bg-orange-50 rounded-lg border border-orange-200">
+                          <div>
+                            <p className="font-medium text-gray-900">{element.element_type}</p>
+                            <p className="text-sm text-gray-500">
+                              {element.concrete_grade} • {element.volume_m3.toFixed(2)} m³
+                              <br />
+                              {element.length_m.toFixed(2)}m × {element.width_m.toFixed(2)}m × {element.depth_m.toFixed(2)}m
+                              {element.location && ` • ${element.location}`}
+                            </p>
+                          </div>
+                          <div className="text-right">
+                            <p className="text-sm font-medium text-gray-900">
+                              {Math.round(element.confidence_score * 100)}%
+                            </p>
+                            <p className="text-xs text-gray-500">Confidence</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <p className="text-gray-500">No concrete elements detected in this drawing.</p>
+                  )}
+                </div>
+
+                {steelElements.length === 0 && concreteElements.length === 0 && (
+                  <p className="text-gray-500">No steel or concrete elements detected in this drawing.</p>
+                )}
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </>
   );
 } 

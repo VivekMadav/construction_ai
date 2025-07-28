@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useQuery } from 'react-query';
@@ -8,7 +8,14 @@ import {
   DocumentTextIcon, 
   CalculatorIcon, 
   ChartBarIcon,
-  CloudArrowUpIcon 
+  CloudArrowUpIcon,
+  MagnifyingGlassIcon as Search,
+  FunnelIcon as Filter,
+  PencilIcon as Edit,
+  TrashIcon as Trash2,
+  EyeIcon as Eye,
+  ArrowDownTrayIcon as Download,
+  CircleStackIcon as Database 
 } from '@heroicons/react/24/outline';
 
 interface Project {
@@ -186,6 +193,39 @@ export default function Dashboard() {
 
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <button
+              onClick={() => setIsCreateModalOpen(true)}
+              className="bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center space-x-3"
+            >
+                              <PlusIcon className="w-6 h-6" />
+              <div className="text-left">
+                <div className="font-semibold">Create Project</div>
+                <div className="text-sm opacity-90">Start a new construction project</div>
+              </div>
+            </button>
+            
+            <a
+              href="/steel-database"
+              className="bg-green-600 text-white p-4 rounded-lg hover:bg-green-700 transition-colors flex items-center space-x-3"
+            >
+              <Database className="w-6 h-6" />
+              <div className="text-left">
+                <div className="font-semibold">Steel Database</div>
+                <div className="text-sm opacity-90">Manage steel sections and detection</div>
+              </div>
+            </a>
+            
+            <div className="bg-purple-600 text-white p-4 rounded-lg flex items-center space-x-3">
+              <Download className="w-6 h-6" />
+              <div className="text-left">
+                <div className="font-semibold">Export Data</div>
+                <div className="text-sm opacity-90">Download reports and analysis</div>
+              </div>
+            </div>
+          </div>
+
           {/* Stats Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <div className="card">

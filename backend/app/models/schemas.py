@@ -229,3 +229,47 @@ class FileUploadResponse(BaseModel):
 class ErrorResponse(BaseModel):
     detail: str
     error_code: Optional[str] = None 
+
+class SteelSectionBase(BaseModel):
+    section_name: str
+    section_type: str
+    depth_mm: Optional[float] = None
+    width_mm: Optional[float] = None
+    thickness_mm: Optional[float] = None
+    kg_per_meter: float
+    area_mm2: Optional[float] = None
+    inertia_mm4: Optional[float] = None
+    description: Optional[str] = None
+
+class SteelSectionCreate(SteelSectionBase):
+    pass
+
+class SteelSection(SteelSectionBase):
+    id: int
+    created_at: datetime
+    updated_at: datetime
+    
+    class Config:
+        from_attributes = True
+
+class SteelElementBase(BaseModel):
+    element_type: str
+    section_name: str
+    section_type: str
+    length_mm: Optional[float] = None
+    mass_kg: Optional[float] = None
+    confidence_score: float = 0.0
+    bbox: Optional[str] = None
+    text_references: Optional[str] = None
+    properties: Optional[str] = None
+
+class SteelElementCreate(SteelElementBase):
+    drawing_id: int
+
+class SteelElement(SteelElementBase):
+    id: int
+    drawing_id: int
+    created_at: datetime
+    
+    class Config:
+        from_attributes = True 

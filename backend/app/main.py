@@ -6,7 +6,7 @@ import os
 
 from .core.config import settings
 from .core.database import engine, Base
-from .api import projects, drawings, elements, materials, analysis, reports
+from .api import projects, drawings, elements, materials, analysis, reports, steel, concrete
 
 # Configure logging
 logging.basicConfig(
@@ -46,6 +46,8 @@ app.include_router(elements.router, prefix="/api/v1/elements", tags=["elements"]
 app.include_router(materials.router, prefix="/api/v1/materials", tags=["materials"])
 app.include_router(analysis.router, prefix="/api/v1/analysis", tags=["analysis"])
 app.include_router(reports.router, prefix="/api/v1/reports", tags=["reports"])
+app.include_router(steel.router, prefix="/api/v1/steel", tags=["steel"])
+app.include_router(concrete.router, prefix="/api/v1/concrete", tags=["concrete"])
 
 
 @app.get("/")

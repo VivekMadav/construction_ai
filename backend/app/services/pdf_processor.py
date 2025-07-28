@@ -51,6 +51,13 @@ except ImportError as e:
     logging.warning(f"Carbon footprint analysis not available: {e}")
     CARBON_ANALYSIS_AVAILABLE = False
 
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).parent.parent.parent / "ml"))
+
+# Temporarily disable enhanced material detection to fix backend
+# from enhanced_material_detection import EnhancedMaterialDetector
+
 logger = logging.getLogger(__name__)
 
 class PDFProcessor:
@@ -97,13 +104,24 @@ class PDFProcessor:
             except Exception as e:
                 logger.error(f"Failed to initialize carbon footprint analysis system: {e}")
                 self.carbon_calculator = None
+        
+        # Temporarily disable enhanced material detector
+        # self.enhanced_material_detector = None
+        # try:
+        #     self.enhanced_material_detector = EnhancedMaterialDetector()
+        #     logger.info("Enhanced material detection system initialized successfully")
+        # except Exception as e:
+        #     logger.error(f"Failed to initialize enhanced material detection system: {e}")
+        #     self.enhanced_material_detector = None
+        
+
     
     def process_pdf_drawing(self, 
                            pdf_path: str, 
                            discipline: str = "architectural",
                            output_dir: Optional[str] = None) -> Dict[str, Any]:
         """
-        Process a PDF drawing and extract elements.
+        Process a PDF drawing and extract elements with enhanced material detection.
         
         Args:
             pdf_path: Path to the PDF file
@@ -122,8 +140,48 @@ class PDFProcessor:
             logger.info(f"Extracted {len(images)} images from PDF: {pdf_path}")
             
             all_elements = []
+            processing_method = "geometric_fallback"
             
-            # Process each image
+            # Temporarily disable enhanced material detection
+            # if self.enhanced_material_detector:
+            #     logger.info("Using enhanced material detection system")
+            #     processing_method = "enhanced_material_detection"
+            #     
+            #     for i, image_path in enumerate(images):
+            #         logger.info(f"Processing image {i+1}/{len(images)}: {image_path}")
+            #         
+            #         # Use enhanced material detection
+            #         enhanced_elements = self.enhanced_material_detector.detect_elements_with_materials(
+            #             image_path, discipline
+            #         )
+            #         
+            #         # Convert enhanced elements to standard format
+            #         elements = []
+            #         for enhanced_element in enhanced_elements:
+            #             element = {
+            #                 'element_type': enhanced_element.element_type,
+            #                 'material': enhanced_element.material,
+            #                 'quantity': 1,
+            #                 'unit': 'item',
+            #                 'area': enhanced_element.area,
+            #                 'confidence_score': enhanced_element.confidence,
+            #                 'material_confidence': enhanced_element.material_confidence,
+            #                 'bbox': enhanced_element.bbox,
+            #                 'properties': enhanced_element.properties,
+            #                 'text_references': enhanced_element.text_references,
+            #                 'image_index': i,
+            #                 'image_path': image_path
+            #             }
+            #             elements.append(element)
+            #         
+            #         all_elements.extend(elements)
+            #         
+            #         # Save detected elements to database
+            #         self._save_elements_to_database(elements, pdf_path, discipline)
+            # else:
+            # Fallback to original detection method
+            logger.info("Using fallback detection method")
+            
             for i, image_path in enumerate(images):
                 logger.info(f"Processing image {i+1}/{len(images)}: {image_path}")
                 
@@ -156,13 +214,14 @@ class PDFProcessor:
             formatted_elements = self._format_elements(all_elements)
             
             logger.info(f"Processed PDF {pdf_path}: {len(formatted_elements)} elements found")
+            logger.debug(f"Successfully processed {len(formatted_elements)} elements using {processing_method} method")
             
             return {
                 "elements": formatted_elements,
                 "total_elements": len(formatted_elements),
                 "images_processed": len(images),
                 "discipline": discipline,
-                "processing_method": "multi_head_inference" if self.inference_system else "geometric_fallback"
+                "processing_method": processing_method
             }
             
         except Exception as e:
@@ -827,6 +886,51 @@ class PDFProcessor:
         
         thickness = typical_thickness.get(material, 0.2)
         return base_density * thickness
+
+    def _save_elements_to_database(self, elements: List[Dict], pdf_path: str, discipline: str):
+        """
+        Save enhanced elements to database with material information
+        """
+        try:
+            from app.models.models import Element
+            from app.database import get_db
+            
+            db = next(get_db())
+            
+            for element_data in elements:
+                element = Element(
+                    element_type=element_data['element_type'],
+                    material=element_data.get('material', 'unknown'),
+                    quantity=element_data['quantity'],
+                    unit=element_data['unit'],
+                    area=element_data.get('area', 0),
+                    confidence_score=element_data['confidence_score'],
+                    material_confidence=element_data.get('material_confidence', 0.0),
+                    bbox=str(element_data['bbox']),
+                    properties=str(element_data.get('properties', {})),
+                    text_references=str(element_data.get('text_references', [])),
+                    drawing_id=self._get_drawing_id_from_path(pdf_path)
+                )
+                db.add(element)
+            
+            db.commit()
+            logger.info(f"Saved {len(elements)} enhanced elements to database")
+            
+        except Exception as e:
+            logger.error(f"Error saving elements to database: {e}")
+
+    def _get_drawing_id_from_path(self, pdf_path: str) -> int:
+        """
+        Extract drawing ID from PDF path
+        """
+        try:
+            # Extract project ID from path like "uploads/1/filename.pdf"
+            path_parts = pdf_path.split('/')
+            if len(path_parts) >= 2:
+                return int(path_parts[1])  # Project ID
+            return 1  # Default fallback
+        except:
+            return 1
 
 # Global instance
 pdf_processor = PDFProcessor() 
