@@ -93,4 +93,4 @@ uploads/*
 
 # Local configuration
 config.local.*
-settings.local.* 
+settings.local.* backend/temp_page_*.png
