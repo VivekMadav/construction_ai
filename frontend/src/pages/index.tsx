@@ -122,6 +122,7 @@ export default function Dashboard() {
   const handleCreateProject = async (e: React.FormEvent) => {
     e.preventDefault();
     console.log('Creating project with data:', newProject);
+    console.log('Form submitted, making API call...');
     try {
       const response = await axios.post('/api/v1/projects/', newProject);
       console.log('Project created successfully:', response.data);
@@ -133,7 +134,10 @@ export default function Dashboard() {
       if (axios.isAxiosError(error)) {
         console.error('Response data:', error.response?.data);
         console.error('Response status:', error.response?.status);
+        console.error('Response headers:', error.response?.headers);
       }
+      // Show error to user
+      alert('Error creating project. Please check the console for details.');
     }
   };
 
@@ -399,7 +403,7 @@ export default function Dashboard() {
             <div className="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
               <div className="mt-3">
                 <h3 className="text-lg font-medium text-gray-900 mb-4">Create New Project</h3>
-                <form onSubmit={handleCreateProject}>
+                <form onSubmit={handleCreateProject} id="create-project-form">
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700">Project Name</label>
@@ -409,6 +413,7 @@ export default function Dashboard() {
                         className="input-field mt-1"
                         value={newProject.name}
                         onChange={(e) => setNewProject({...newProject, name: e.target.value})}
+                        onBlur={() => console.log('Name field blurred, current value:', newProject.name)}
                       />
                     </div>
                     <div>
@@ -473,8 +478,23 @@ export default function Dashboard() {
                     >
                       Cancel
                     </button>
-                    <button type="submit" className="btn-primary">
+                    <button 
+                      type="submit" 
+                      className="btn-primary"
+                      onClick={() => console.log('Create Project button clicked')}
+                    >
                       Create Project
+                    </button>
+                    <button 
+                      type="button" 
+                      className="btn-secondary ml-2"
+                      onClick={() => {
+                        console.log('Test button clicked');
+                        console.log('Current form data:', newProject);
+                        alert('Test button works! Form data: ' + JSON.stringify(newProject));
+                      }}
+                    >
+                      Test Button
                     </button>
                   </div>
                 </form>

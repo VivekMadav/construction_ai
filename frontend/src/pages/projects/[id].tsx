@@ -109,6 +109,9 @@ export default function ProjectDetail() {
   const [loadingSteelElements, setLoadingSteelElements] = useState(false);
   const [concreteElements, setConcreteElements] = useState<ConcreteElement[]>([]);
   const [loadingConcreteElements, setLoadingConcreteElements] = useState(false);
+  const [batchFiles, setBatchFiles] = useState<{ [key: string]: File[] }>({});
+  const [batchUploading, setBatchUploading] = useState(false);
+  const [showBatchUpload, setShowBatchUpload] = useState(false);
 
   useEffect(() => {
     if (id) {
@@ -179,6 +182,91 @@ export default function ProjectDetail() {
       alert('Upload failed. Please try again.');
     } finally {
       setUploading(null);
+    }
+  };
+
+  const handleBatchFileSelect = (discipline: string, event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    const pdfFiles = files.filter(file => file.type === 'application/pdf');
+    
+    if (pdfFiles.length > 0) {
+      setBatchFiles(prev => ({ ...prev, [discipline]: pdfFiles }));
+    } else {
+      alert('Please select PDF files');
+    }
+  };
+
+  const handleBatchUpload = async () => {
+    setBatchUploading(true);
+    const allFiles = Object.values(batchFiles).flat();
+    
+    if (allFiles.length === 0) {
+      alert('Please select files to upload');
+      setBatchUploading(false);
+      return;
+    }
+
+    try {
+      // Upload all files first
+      const uploadPromises = Object.entries(batchFiles).map(([discipline, files]) =>
+        files.map(file => {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('discipline', discipline);
+          return fetch(`http://localhost:8000/api/v1/drawings/upload/${id}/`, {
+            method: 'POST',
+            body: formData,
+          });
+        })
+      ).flat();
+
+      const uploadResults = await Promise.all(uploadPromises);
+      const failedUploads = uploadResults.filter(result => !result.ok);
+      
+      if (failedUploads.length > 0) {
+        alert(`Failed to upload ${failedUploads.length} files. Please try again.`);
+        setBatchUploading(false);
+        return;
+      }
+
+      // Refresh drawings list
+      await fetchDrawings();
+      
+      // Get all drawing IDs for batch analysis
+      const updatedDrawings = await fetch(`http://localhost:8000/api/v1/drawings/project/${id}/`).then(r => r.json());
+      const drawingIds = updatedDrawings.map((d: Drawing) => d.id);
+      
+      if (drawingIds.length > 0) {
+        // Trigger batch analysis with cross-drawing references
+        const analysisResponse = await fetch(`http://localhost:8000/api/v1/enhanced-analysis/project/${id}/batch`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            drawing_ids: drawingIds,
+            enable_cross_references: true,
+            enable_notes_analysis: true
+          }),
+        });
+
+        if (analysisResponse.ok) {
+          const analysisResult = await analysisResponse.json();
+          alert(`Batch upload and analysis completed!\n\nUploaded: ${allFiles.length} files\nAnalyzed: ${drawingIds.length} drawings\nCross-references found: ${analysisResult.cross_references_count || 0}`);
+        } else {
+          alert('Files uploaded successfully, but analysis failed. You can analyze individual drawings.');
+        }
+      }
+
+      // Clear batch files
+      setBatchFiles({});
+      setShowBatchUpload(false);
+      
+    } catch (error) {
+      console.error('Batch upload error:', error);
+      alert('Batch upload failed. Please try again.');
+    } finally {
+      setBatchUploading(false);
     }
   };
 
@@ -309,6 +397,40 @@ export default function ProjectDetail() {
     } catch (error) {
       console.error('Error retrying drawing:', error);
       alert('Failed to retry processing');
+    }
+  };
+
+  const analyzeAllDrawings = async () => {
+    if (drawings.length === 0) {
+      alert('No drawings to analyze');
+      return;
+    }
+
+    try {
+      const drawingIds = drawings.map(d => d.id);
+      
+      const response = await fetch(`http://localhost:8000/api/v1/enhanced-analysis/project/${id}/batch`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          drawing_ids: drawingIds,
+          enable_cross_references: true,
+          enable_notes_analysis: true
+        }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(`Batch analysis completed!\n\nAnalyzed: ${drawingIds.length} drawings\nCross-references found: ${result.cross_references_count || 0}\nNotes analyzed: ${result.notes_analyzed_count || 0}`);
+        fetchDrawings(); // Refresh to show updated status
+      } else {
+        alert('Batch analysis failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Batch analysis error:', error);
+      alert('Batch analysis failed. Please try again.');
     }
   };
 
@@ -454,7 +576,90 @@ export default function ProjectDetail() {
                     </div>
                   </div>
 
-                  {/* Upload Section */}
+                  {/* Batch Upload Section */}
+                  <div className="p-6 border-b border-gray-200">
+                    <div className="flex items-center justify-between mb-4">
+                      <h4 className="text-lg font-medium text-gray-900">Batch Upload & Analysis</h4>
+                      <div className="flex space-x-2">
+                        <button
+                          onClick={() => setShowBatchUpload(!showBatchUpload)}
+                          className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors"
+                        >
+                          {showBatchUpload ? 'Hide' : 'Show'} Batch Upload
+                        </button>
+                        {drawings.length > 0 && (
+                          <button
+                            onClick={analyzeAllDrawings}
+                            className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
+                          >
+                            Analyze All Drawings
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                    
+                    {showBatchUpload && (
+                      <div className="border-2 border-dashed border-purple-300 rounded-lg p-6 bg-purple-50">
+                        <div className="text-center mb-4">
+                          <Upload className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+                          <h5 className="text-lg font-medium text-gray-900 mb-2">Batch Upload Multiple Drawings</h5>
+                          <p className="text-sm text-gray-600 mb-4">
+                            Upload multiple drawings at once for cross-reference analysis. This enables the system to detect references between drawings.
+                          </p>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4 mb-4">
+                          {DISCIPLINES.map((discipline) => (
+                            <div key={discipline.key} className="border border-gray-200 rounded-lg p-4">
+                              <div className="flex items-center space-x-2 mb-2">
+                                {discipline.icon}
+                                <span className="font-medium text-gray-900">{discipline.name}</span>
+                              </div>
+                              <label htmlFor={`batch-file-upload-${discipline.key}`} className="cursor-pointer">
+                                <span className="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700 transition-colors">
+                                  Select {discipline.name} Files
+                                </span>
+                                <input
+                                  id={`batch-file-upload-${discipline.key}`}
+                                  type="file"
+                                  accept=".pdf"
+                                  multiple
+                                  onChange={(e) => handleBatchFileSelect(discipline.key, e)}
+                                  className="hidden"
+                                />
+                              </label>
+                              {batchFiles[discipline.key] && batchFiles[discipline.key].length > 0 && (
+                                <div className="mt-2">
+                                  <p className="text-xs text-gray-600">
+                                    {batchFiles[discipline.key].length} file(s) selected
+                                  </p>
+                                  <div className="text-xs text-gray-500 mt-1">
+                                    {batchFiles[discipline.key].slice(0, 2).map(f => f.name).join(', ')}
+                                    {batchFiles[discipline.key].length > 2 && ` +${batchFiles[discipline.key].length - 2} more`}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                        
+                        <div className="text-center">
+                          <button
+                            onClick={handleBatchUpload}
+                            disabled={batchUploading || Object.values(batchFiles).flat().length === 0}
+                            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 disabled:opacity-50 transition-colors"
+                          >
+                            {batchUploading ? 'Uploading & Analyzing...' : 'Upload & Analyze All'}
+                          </button>
+                          <p className="text-xs text-gray-500 mt-2">
+                            This will upload all files and then analyze them together for cross-references
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Individual Upload Section */}
                   <div className="p-6 border-b border-gray-200">
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
                       <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />

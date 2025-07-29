@@ -65,8 +65,8 @@ class EnhancedInferenceSystem:
                 element = {
                     "id": f"{result.element_type}_{len(elements):03d}",
                     "type": result.element_type,
-                    "bbox": result.bbox,
-                    "confidence": result.confidence,
+                    "bbox": result.bbox.tolist() if hasattr(result.bbox, 'tolist') else result.bbox,
+                    "confidence": float(result.confidence),
                     "properties": result.properties,
                     "discipline": result.discipline.value
                 }

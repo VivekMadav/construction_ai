@@ -1,0 +1,3 @@
+# Placeholder model file for civil detection
+# This is a placeholder - in a real implementation, this would be a trained PyTorch model
+# The system currently uses geometric detection as a fallback 

@@ -14,7 +14,7 @@ class ProjectBase(BaseModel):
 
 
 class ProjectCreate(ProjectBase):
-    pass
+    status: Optional[str] = "draft"
 
 
 class ProjectUpdate(BaseModel):

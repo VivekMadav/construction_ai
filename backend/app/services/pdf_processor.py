@@ -11,7 +11,7 @@ import numpy as np
 import fitz  # PyMuPDF
 import logging
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 import json
 import sys
 
@@ -50,6 +50,33 @@ try:
 except ImportError as e:
     logging.warning(f"Carbon footprint analysis not available: {e}")
     CARBON_ANALYSIS_AVAILABLE = False
+
+# Add the ML directory to the path for drawing reference analysis
+try:
+    # Add the ml directory to the Python path
+    ml_path = str(Path(__file__).parent.parent.parent.parent / "ml")
+    if ml_path not in sys.path:
+        sys.path.insert(0, ml_path)
+    
+    from drawing_reference_analyzer import DrawingReferenceAnalyzer
+    from enhanced_element_measurement import EnhancedElementMeasurement
+    REFERENCE_ANALYSIS_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Drawing reference analysis not available: {e}")
+    REFERENCE_ANALYSIS_AVAILABLE = False
+
+# Add the ML directory to the path for drawing notes analysis
+try:
+    # Add the ml directory to the Python path
+    ml_path = str(Path(__file__).parent.parent.parent.parent / "ml")
+    if ml_path not in sys.path:
+        sys.path.insert(0, ml_path)
+    
+    from drawing_notes_analyzer import DrawingNotesAnalyzer
+    NOTES_ANALYSIS_AVAILABLE = True
+except ImportError as e:
+    logging.warning(f"Drawing notes analysis not available: {e}")
+    NOTES_ANALYSIS_AVAILABLE = False
 
 import sys
 from pathlib import Path
@@ -104,6 +131,29 @@ class PDFProcessor:
             except Exception as e:
                 logger.error(f"Failed to initialize carbon footprint analysis system: {e}")
                 self.carbon_calculator = None
+        
+        # Initialize drawing reference analysis system if available
+        self.reference_analyzer = None
+        self.enhanced_measurement = None
+        if REFERENCE_ANALYSIS_AVAILABLE:
+            try:
+                self.reference_analyzer = DrawingReferenceAnalyzer()
+                self.enhanced_measurement = EnhancedElementMeasurement()
+                logger.info("Drawing reference analysis system initialized successfully")
+            except Exception as e:
+                logger.error(f"Failed to initialize drawing reference analysis system: {e}")
+                self.reference_analyzer = None
+                self.enhanced_measurement = None
+        
+        # Initialize drawing notes analysis system if available
+        self.notes_analyzer = None
+        if NOTES_ANALYSIS_AVAILABLE:
+            try:
+                self.notes_analyzer = DrawingNotesAnalyzer()
+                logger.info("Drawing notes analysis system initialized successfully")
+            except Exception as e:
+                logger.error(f"Failed to initialize drawing notes analysis system: {e}")
+                self.notes_analyzer = None
         
         # Temporarily disable enhanced material detector
         # self.enhanced_material_detector = None
@@ -457,6 +507,254 @@ class PDFProcessor:
                 'message': f'Carbon footprint analysis failed: {str(e)}',
                 'timestamp': '2024-01-01T00:00:00'
             }
+    
+    def process_drawing_with_cross_references(self, 
+                                            drawing_id: int,
+                                            pdf_path: str, 
+                                            discipline: str = "architectural") -> Dict[str, Any]:
+        """
+        Process drawing with cross-drawing reference analysis for enhanced accuracy.
+        
+        Args:
+            drawing_id: Unique drawing identifier
+            pdf_path: Path to the PDF drawing
+            discipline: Discipline category
+            
+        Returns:
+            Enhanced analysis results with cross-references
+        """
+        try:
+            logger.info(f"Starting enhanced analysis with cross-references for drawing {drawing_id}")
+            
+            # Step 1: Standard processing
+            standard_results = self.process_pdf_drawing(pdf_path, discipline)
+            
+            # Check if standard processing was successful
+            if 'error' in standard_results:
+                return {
+                    'status': 'error',
+                    'message': f'Standard processing failed: {standard_results["error"]}',
+                    'drawing_id': drawing_id,
+                    'timestamp': '2024-01-01T00:00:00'
+                }
+            
+            # Step 2: Analyze cross-references if reference analyzer is available
+            cross_references = []
+            enhanced_elements = []
+            notes_report = {}
+            
+            # Get standard elements first
+            standard_elements = standard_results.get('elements', [])
+            
+            # Step 2a: Analyze drawing notes and apply to elements
+            if self.notes_analyzer:
+                try:
+                    enhanced_elements, notes_report = self.analyze_drawing_notes_and_apply(
+                        pdf_path, standard_elements
+                    )
+                    logger.info(f"Drawing notes analysis completed: {len(notes_report.get('material_specifications', {}).get('concrete', []))} concrete specs")
+                except Exception as e:
+                    logger.error(f"Error in drawing notes analysis: {e}")
+                    enhanced_elements = standard_elements
+            else:
+                enhanced_elements = standard_elements
+            
+            # Step 2b: Analyze cross-references if reference analyzer is available
+            if self.reference_analyzer and self.enhanced_measurement:
+                try:
+                    # Analyze drawing references
+                    references = self.reference_analyzer.analyze_drawing_references(
+                        str(drawing_id), pdf_path
+                    )
+                    
+                    # Get reference drawing IDs
+                    reference_drawing_ids = list(set([
+                        ref.target_drawing_id for ref in references 
+                        if ref.target_drawing_id != "unknown"
+                    ]))
+                    
+                    # Enhanced measurement for each element (now with notes applied)
+                    final_enhanced_elements = []
+                    for element in enhanced_elements:
+                        enhanced_element = self.enhanced_measurement.measure_element_with_cross_references(
+                            str(drawing_id), element, reference_drawing_ids
+                        )
+                        final_enhanced_elements.append(enhanced_element)
+                    
+                    enhanced_elements = final_enhanced_elements
+                    
+                    # Convert cross-references to serializable format
+                    serializable_references = []
+                    for ref in references:
+                        serializable_references.append({
+                            'source_drawing_id': ref.source_drawing_id,
+                            'target_drawing_id': ref.target_drawing_id,
+                            'reference_type': ref.reference_type.value,
+                            'reference_mark': ref.reference_mark,
+                            'confidence': float(ref.confidence),
+                            'description': ref.description
+                        })
+                    cross_references = serializable_references
+                    
+                    logger.info(f"Enhanced analysis completed with {len(references)} cross-references")
+                    
+                except Exception as e:
+                    logger.error(f"Error in cross-reference analysis: {e}")
+                    # Keep elements with notes applied
+            else:
+                # Use elements with notes applied if reference analysis is not available
+                pass
+            
+            # Step 3: Calculate enhanced metrics
+            measurement_confidence = 0.0
+            completeness_score = 0.0
+            
+            if enhanced_elements and hasattr(enhanced_elements[0], 'overall_confidence'):
+                # Calculate average confidence and completeness
+                confidences = [elem.overall_confidence for elem in enhanced_elements]
+                completeness_scores = [elem.measurement_completeness for elem in enhanced_elements]
+                
+                measurement_confidence = sum(confidences) / len(confidences) if confidences else 0.0
+                completeness_score = sum(completeness_scores) / len(completeness_scores) if completeness_scores else 0.0
+            else:
+                # Fallback to standard confidence
+                measurement_confidence = standard_results.get('confidence', 0.7)
+                completeness_score = 0.8  # Default completeness
+            
+            # Step 4: Convert enhanced elements to serializable format
+            serializable_elements = []
+            for element in enhanced_elements:
+                if hasattr(element, 'element_id'):  # EnhancedElement object
+                    serializable_element = {
+                        'element_id': element.element_id,
+                        'element_type': element.element_type,
+                        'primary_drawing_id': element.primary_drawing_id,
+                        'reference_drawings': element.reference_drawings,
+                        'overall_confidence': float(element.overall_confidence),
+                        'cross_reference_confidence': float(element.cross_reference_confidence),
+                        'measurement_completeness': float(element.measurement_completeness),
+                        'measurements': {}
+                    }
+                    
+                    # Convert measurements to serializable format
+                    for measurement_type, measurement in element.measurements.items():
+                        serializable_element['measurements'][measurement_type.value] = {
+                            'value': float(measurement.value),
+                            'unit': measurement.unit,
+                            'confidence': float(measurement.confidence),
+                            'source_drawings': measurement.source_drawings,
+                            'cross_reference_confidence': float(measurement.cross_reference_confidence),
+                            'measurement_method': measurement.measurement_method,
+                            'notes': measurement.notes
+                        }
+                    
+                    serializable_elements.append(serializable_element)
+                else:
+                    # Regular dictionary element
+                    serializable_elements.append(element)
+            
+            # Step 5: Prepare enhanced results
+            result = {
+                'status': 'success',
+                'message': f'Enhanced analysis completed for drawing {drawing_id}',
+                'drawing_id': drawing_id,
+                'discipline': discipline,
+                'elements': serializable_elements,
+                'cross_references': cross_references,
+                'notes_report': notes_report,
+                'measurement_confidence': float(measurement_confidence),
+                'completeness_score': float(completeness_score),
+                'element_count': len(enhanced_elements),
+                'reference_count': len(cross_references),
+                'notes_analysis': {
+                    'concrete_specs_found': len(notes_report.get('material_specifications', {}).get('concrete', [])),
+                    'steel_specs_found': len(notes_report.get('material_specifications', {}).get('steel', [])),
+                    'critical_info_found': len(notes_report.get('critical_information', {})),
+                    'general_notes_found': len(notes_report.get('notes_content', {}).get('general_notes', []))
+                },
+                'timestamp': '2024-01-01T00:00:00'
+            }
+            
+            logger.info(f"Enhanced analysis completed: {len(enhanced_elements)} elements, {len(cross_references)} references")
+            return result
+            
+        except Exception as e:
+            logger.error(f"Error in enhanced analysis: {e}")
+            return {
+                'status': 'error',
+                'message': f'Enhanced analysis failed: {str(e)}',
+                'timestamp': '2024-01-01T00:00:00'
+            }
+    
+    def analyze_drawing_notes_and_apply(self, 
+                                      drawing_path: str, 
+                                      elements: List[Dict]) -> Tuple[List[Dict], Dict[str, Any]]:
+        """
+        Analyze drawing notes and apply specifications to elements.
+        
+        Args:
+            drawing_path: Path to the drawing file
+            elements: List of detected elements
+            
+        Returns:
+            Tuple of (enhanced_elements, notes_report)
+        """
+        try:
+            if not self.notes_analyzer:
+                logger.warning("Drawing notes analyzer not available")
+                return elements, {}
+            
+            # Analyze drawing notes
+            specifications = self.notes_analyzer.analyze_drawing_notes(drawing_path)
+            
+            # Apply notes to elements
+            enhanced_elements = self.notes_analyzer.apply_notes_to_elements(elements, specifications)
+            
+            # Generate notes report
+            notes_report = self.notes_analyzer.generate_notes_report(specifications)
+            
+            logger.info(f"Drawing notes analysis completed: {len(specifications.concrete_specs)} concrete specs, {len(specifications.steel_specs)} steel specs")
+            
+            return enhanced_elements, notes_report
+            
+        except Exception as e:
+            logger.error(f"Error analyzing drawing notes: {e}")
+            return elements, {}
+    
+    def get_drawing_cross_references(self, drawing_id: int) -> List[Dict[str, Any]]:
+        """
+        Get cross-references for a specific drawing.
+        
+        Args:
+            drawing_id: Drawing identifier
+            
+        Returns:
+            List of cross-references
+        """
+        try:
+            if not self.reference_analyzer:
+                return []
+            
+            # Get references from the analyzer's database
+            references = self.reference_analyzer.reference_database.get(str(drawing_id), [])
+            
+            # Convert to dictionary format for API response
+            cross_references = []
+            for ref in references:
+                cross_references.append({
+                    'source_drawing_id': ref.source_drawing_id,
+                    'target_drawing_id': ref.target_drawing_id,
+                    'reference_type': ref.reference_type.value,
+                    'reference_mark': ref.reference_mark,
+                    'confidence': ref.confidence,
+                    'description': ref.description
+                })
+            
+            return cross_references
+            
+        except Exception as e:
+            logger.error(f"Error getting cross-references: {e}")
+            return []
     
     def _extract_images_from_pdf(self, pdf_path: str, output_dir: Optional[str] = None) -> List[str]:
         """Extract images from PDF file."""

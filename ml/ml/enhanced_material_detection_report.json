@@ -1,0 +1,39 @@
+{
+  "text_analysis": {
+    "material_texts": [],
+    "text_regions": [],
+    "material_distribution": {
+      "concrete": 0,
+      "steel": 0,
+      "timber": 0
+    },
+    "total_regions": 0,
+    "material_regions": 0
+  },
+  "enhanced_detection": [
+    "EnhancedElement(element_type='column', material='concrete', confidence=0.7, bbox=(133, 167, 4506, 6405), area=28850014.5, aspect_ratio=0.7035128805620608, material_confidence=0.6, text_references=[], properties={'mean_color': array([247.75135472, 247.747106  , 247.76119311]), 'std_color': array([36.96687375, 36.99215701, 36.90823338]), 'mean_hue': np.float64(0.49422028326876505), 'mean_saturation': np.float64(0.17293424016481798), 'mean_value': np.float64(247.76294485312843), 'mean_lightness': np.float64(247.9232451275825), 'edge_density': np.float64(0.034048660247608095), 'texture_variance': np.float64(1366.3599160064766), 'texture_mean': np.float64(247.75174573376535), 'gradient_magnitude': np.float64(34.99904043878765), 'reinforced': True})"
+  ],
+  "accuracy_metrics": {
+    "../backend/uploads/1/page_1.png": {
+      "total_elements": 1,
+      "high_confidence_elements": 0,
+      "confidence_rate": 0.0,
+      "material_variety": 1,
+      "text_regions": 0,
+      "material_text_regions": 0
+    },
+    "../backend/uploads/page_1.png": {
+      "total_elements": 1,
+      "high_confidence_elements": 0,
+      "confidence_rate": 0.0,
+      "material_variety": 1,
+      "text_regions": 0,
+      "material_text_regions": 0
+    }
+  },
+  "summary": {
+    "total_material_texts": 0,
+    "total_enhanced_elements": 1,
+    "average_confidence": 0.6
+  }
+}
