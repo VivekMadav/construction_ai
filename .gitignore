@@ -90,6 +90,8 @@ uploads/*
 # Temporary files
 *.tmp
 *.temp
+temp_*
+test_*.py
 
 # Local configuration
 config.local.*
