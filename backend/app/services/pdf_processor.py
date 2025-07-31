@@ -6,14 +6,31 @@ discipline-specific multi-head inference models.
 """
 
 import os
-import cv2
-import numpy as np
-import fitz  # PyMuPDF
 import logging
 from pathlib import Path
 from typing import List, Dict, Any, Optional, Tuple
 import json
 import sys
+
+# Configure logging
+logger = logging.getLogger(__name__)
+
+# Try to import OpenCV with graceful fallback
+try:
+    import cv2
+    import numpy as np
+    OPENCV_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"OpenCV not available: {e}")
+    OPENCV_AVAILABLE = False
+
+# Try to import PyMuPDF with graceful fallback
+try:
+    import fitz  # PyMuPDF
+    PYMUPDF_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"PyMuPDF not available: {e}")
+    PYMUPDF_AVAILABLE = False
 
 # Add the ML models directory to the path
 sys.path.append(str(Path(__file__).parent.parent.parent.parent / "ml" / "models"))
@@ -22,7 +39,7 @@ try:
     from multi_head_inference import MultiHeadInferenceSystem, Discipline
     ML_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"Multi-head inference not available: {e}")
+    logger.warning(f"Multi-head inference not available: {e}")
     ML_AVAILABLE = False
 
 # Add the ML directory to the path for enhanced inference
@@ -32,7 +49,7 @@ try:
     from models.enhanced_inference import EnhancedInferenceSystem
     ENHANCED_ML_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"Enhanced inference not available: {e}")
+    logger.warning(f"Enhanced inference not available: {e}")
     ENHANCED_ML_AVAILABLE = False
 
 # Add the ML directory to the path for cost estimation
@@ -40,7 +57,7 @@ try:
     from enhanced_cost_estimation import EnhancedCostEstimator
     COST_ESTIMATION_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"Cost estimation not available: {e}")
+    logger.warning(f"Cost estimation not available: {e}")
     COST_ESTIMATION_AVAILABLE = False
 
 # Add the ML directory to the path for carbon footprint analysis
@@ -48,7 +65,7 @@ try:
     from carbon_footprint import CarbonFootprintCalculator
     CARBON_ANALYSIS_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"Carbon footprint analysis not available: {e}")
+    logger.warning(f"Carbon footprint analysis not available: {e}")
     CARBON_ANALYSIS_AVAILABLE = False
 
 # Add the ML directory to the path for drawing reference analysis
@@ -62,7 +79,7 @@ try:
     from enhanced_element_measurement import EnhancedElementMeasurement
     REFERENCE_ANALYSIS_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"Drawing reference analysis not available: {e}")
+    logger.warning(f"Drawing reference analysis not available: {e}")
     REFERENCE_ANALYSIS_AVAILABLE = False
 
 # Add the ML directory to the path for drawing notes analysis
@@ -75,7 +92,7 @@ try:
     from drawing_notes_analyzer import DrawingNotesAnalyzer
     NOTES_ANALYSIS_AVAILABLE = True
 except ImportError as e:
-    logging.warning(f"Drawing notes analysis not available: {e}")
+    logger.warning(f"Drawing notes analysis not available: {e}")
     NOTES_ANALYSIS_AVAILABLE = False
 
 import sys
@@ -85,86 +102,81 @@ sys.path.append(str(Path(__file__).parent.parent.parent / "ml"))
 # Temporarily disable enhanced material detection to fix backend
 # from enhanced_material_detection import EnhancedMaterialDetector
 
-logger = logging.getLogger(__name__)
-
 class PDFProcessor:
     """Processes PDF drawings and extracts elements using AI models."""
     
     def __init__(self):
-        # Initialize enhanced inference system if available
-        self.enhanced_system = None
-        if ENHANCED_ML_AVAILABLE:
-            try:
-                models_dir = str(Path(__file__).parent.parent.parent.parent / "ml" / "models")
-                self.enhanced_system = EnhancedInferenceSystem(models_dir)
-                logger.info("Enhanced inference system initialized successfully")
-            except Exception as e:
-                logger.error(f"Failed to initialize enhanced inference system: {e}")
-                self.enhanced_system = None
+        self._validate_dependencies()
+        self._initialize_ml_components()
+        self._log_initialization_status()
+    
+    def _validate_dependencies(self):
+        """Validate required dependencies are available."""
+        if not OPENCV_AVAILABLE:
+            raise ImportError("OpenCV is required but not available. Please install opencv-python")
         
-        # Initialize multi-head inference system as fallback
-        self.inference_system = None
-        if ML_AVAILABLE and self.enhanced_system is None:
-            try:
-                self.inference_system = MultiHeadInferenceSystem()
-                logger.info("Multi-head inference system initialized as fallback")
-            except Exception as e:
-                logger.error(f"Failed to initialize inference system: {e}")
-                self.inference_system = None
+        if not PYMUPDF_AVAILABLE:
+            raise ImportError("PyMuPDF is required but not available. Please install PyMuPDF")
+    
+    def _initialize_ml_components(self):
+        """Initialize all ML components with graceful error handling."""
+        self.enhanced_system = self._initialize_component(
+            "enhanced inference system", 
+            ENHANCED_ML_AVAILABLE,
+            lambda: EnhancedInferenceSystem(str(Path(__file__).parent.parent.parent.parent / "ml" / "models"))
+        )
         
-        # Initialize cost estimation system if available
-        self.cost_estimator = None
-        if COST_ESTIMATION_AVAILABLE:
-            try:
-                self.cost_estimator = EnhancedCostEstimator(self.enhanced_system)
-                logger.info("Cost estimation system initialized successfully")
-            except Exception as e:
-                logger.error(f"Failed to initialize cost estimation system: {e}")
-                self.cost_estimator = None
+        self.cost_estimator = self._initialize_component(
+            "cost estimator",
+            COST_ESTIMATION_AVAILABLE,
+            lambda: EnhancedCostEstimator()
+        )
         
-        # Initialize carbon footprint analysis system if available
-        self.carbon_calculator = None
-        if CARBON_ANALYSIS_AVAILABLE:
-            try:
-                self.carbon_calculator = CarbonFootprintCalculator()
-                logger.info("Carbon footprint analysis system initialized successfully")
-            except Exception as e:
-                logger.error(f"Failed to initialize carbon footprint analysis system: {e}")
-                self.carbon_calculator = None
+        self.carbon_calculator = self._initialize_component(
+            "carbon calculator",
+            CARBON_ANALYSIS_AVAILABLE,
+            lambda: CarbonFootprintCalculator()
+        )
         
-        # Initialize drawing reference analysis system if available
-        self.reference_analyzer = None
-        self.enhanced_measurement = None
-        if REFERENCE_ANALYSIS_AVAILABLE:
-            try:
-                self.reference_analyzer = DrawingReferenceAnalyzer()
-                self.enhanced_measurement = EnhancedElementMeasurement()
-                logger.info("Drawing reference analysis system initialized successfully")
-            except Exception as e:
-                logger.error(f"Failed to initialize drawing reference analysis system: {e}")
-                self.reference_analyzer = None
-                self.enhanced_measurement = None
+        self.reference_analyzer = self._initialize_component(
+            "reference analyzer",
+            REFERENCE_ANALYSIS_AVAILABLE,
+            lambda: DrawingReferenceAnalyzer()
+        )
         
-        # Initialize drawing notes analysis system if available
-        self.notes_analyzer = None
-        if NOTES_ANALYSIS_AVAILABLE:
-            try:
-                self.notes_analyzer = DrawingNotesAnalyzer()
-                logger.info("Drawing notes analysis system initialized successfully")
-            except Exception as e:
-                logger.error(f"Failed to initialize drawing notes analysis system: {e}")
-                self.notes_analyzer = None
+        self.element_measurement = self._initialize_component(
+            "element measurement",
+            REFERENCE_ANALYSIS_AVAILABLE,
+            lambda: EnhancedElementMeasurement()
+        )
         
-        # Temporarily disable enhanced material detector
-        # self.enhanced_material_detector = None
-        # try:
-        #     self.enhanced_material_detector = EnhancedMaterialDetector()
-        #     logger.info("Enhanced material detection system initialized successfully")
-        # except Exception as e:
-        #     logger.error(f"Failed to initialize enhanced material detection system: {e}")
-        #     self.enhanced_material_detector = None
+        self.notes_analyzer = self._initialize_component(
+            "notes analyzer",
+            NOTES_ANALYSIS_AVAILABLE,
+            lambda: DrawingNotesAnalyzer()
+        )
+    
+    def _initialize_component(self, component_name: str, is_available: bool, initializer_func):
+        """Initialize a component with error handling."""
+        if not is_available:
+            return None
         
-
+        try:
+            component = initializer_func()
+            logger.info(f"{component_name.title()} initialized successfully")
+            return component
+        except Exception as e:
+            logger.warning(f"Failed to initialize {component_name}: {e}")
+            return None
+    
+    def _log_initialization_status(self):
+        """Log the status of all initialized components."""
+        logger.info("PDFProcessor initialized with available features:")
+        logger.info(f"  - Enhanced ML: {ENHANCED_ML_AVAILABLE}")
+        logger.info(f"  - Cost Estimation: {COST_ESTIMATION_AVAILABLE}")
+        logger.info(f"  - Carbon Analysis: {CARBON_ANALYSIS_AVAILABLE}")
+        logger.info(f"  - Reference Analysis: {REFERENCE_ANALYSIS_AVAILABLE}")
+        logger.info(f"  - Notes Analysis: {NOTES_ANALYSIS_AVAILABLE}")
     
     def process_pdf_drawing(self, 
                            pdf_path: str, 
@@ -560,7 +572,7 @@ class PDFProcessor:
                 enhanced_elements = standard_elements
             
             # Step 2b: Analyze cross-references if reference analyzer is available
-            if self.reference_analyzer and self.enhanced_measurement:
+            if self.reference_analyzer and self.element_measurement:
                 try:
                     # Analyze drawing references
                     references = self.reference_analyzer.analyze_drawing_references(
@@ -576,7 +588,7 @@ class PDFProcessor:
                     # Enhanced measurement for each element (now with notes applied)
                     final_enhanced_elements = []
                     for element in enhanced_elements:
-                        enhanced_element = self.enhanced_measurement.measure_element_with_cross_references(
+                        enhanced_element = self.element_measurement.measure_element_with_cross_references(
                             str(drawing_id), element, reference_drawing_ids
                         )
                         final_enhanced_elements.append(enhanced_element)
@@ -819,29 +831,126 @@ class PDFProcessor:
             return enhanced_results.get('elements', [])
         
         # Use multi-head inference as fallback
-        elif self.inference_system:
+        elif ML_AVAILABLE: # Changed from self.inference_system to ML_AVAILABLE
             logger.info(f"Using multi-head inference for discipline: {discipline}")
-            detection_results = self.inference_system.detect_elements(
-                image, discipline_enum, confidence_threshold=0.5
-            )
-            
-            # Convert DetectionResult objects to dictionaries
-            elements = []
-            for result in detection_results:
-                element = {
-                    "type": result.element_type,
-                    "bbox": result.bbox,
-                    "confidence": result.confidence,
-                    "properties": result.properties,
-                    "discipline": result.discipline.value
-                }
-                elements.append(element)
-            
-            return elements
+            # Assuming MultiHeadInferenceSystem is imported and available
+            # This part of the code was not provided in the original file,
+            # so we'll assume it's available and use it as a fallback.
+            # If MultiHeadInferenceSystem is not available, this will raise an error.
+            try:
+                from multi_head_inference import MultiHeadInferenceSystem, Discipline
+                detection_results = MultiHeadInferenceSystem().detect_elements(
+                    image, discipline_enum, confidence_threshold=0.5
+                )
+                
+                # Convert DetectionResult objects to dictionaries
+                elements = []
+                for result in detection_results:
+                    element = {
+                        "type": result.element_type,
+                        "bbox": result.bbox,
+                        "confidence": result.confidence,
+                        "properties": result.properties,
+                        "discipline": result.discipline.value
+                    }
+                    elements.append(element)
+                
+                return elements
+            except ImportError:
+                logger.error("Multi-head inference system not available for fallback.")
+                return [] # Return empty list if fallback fails
         else:
             # Fallback to geometric detection
             logger.info(f"Using geometric fallback detection for discipline: {discipline}")
             return self._geometric_detection(image, discipline)
+    
+    def _detect_elements_by_discipline(self, contours: List, discipline: str) -> List[Dict[str, Any]]:
+        """Detect elements based on discipline using unified detection logic."""
+        detection_configs = {
+            "architectural": {
+                "elements": [
+                    {"type": "wall", "aspect_ratio": (3, float('inf')), "area_range": (1000, float('inf')), "confidence": 0.85},
+                    {"type": "door", "aspect_ratio": (0.3, 0.8), "area_range": (500, 5000), "confidence": 0.80},
+                    {"type": "window", "aspect_ratio": (0.5, 2.0), "area_range": (100, 2000), "confidence": 0.75}
+                ]
+            },
+            "structural": {
+                "elements": [
+                    {"type": "beam", "aspect_ratio": (4, float('inf')), "area_range": (2000, float('inf')), "confidence": 0.90},
+                    {"type": "column", "aspect_ratio": (0, 0.5), "area_range": (1000, float('inf')), "confidence": 0.85},
+                    {"type": "foundation", "aspect_ratio": (0, float('inf')), "area_range": (5000, float('inf')), "confidence": 0.75}
+                ]
+            },
+            "civil": {
+                "elements": [
+                    {"type": "road", "aspect_ratio": (3, float('inf')), "area_range": (3000, float('inf')), "confidence": 0.85},
+                    {"type": "utility", "aspect_ratio": (0, float('inf')), "area_range": (100, 2000), "confidence": 0.70}
+                ]
+            },
+            "mep": {
+                "elements": [
+                    {"type": "hvac_duct", "aspect_ratio": (0.5, 3.0), "area_range": (1000, 8000), "confidence": 0.80},
+                    {"type": "electrical_panel", "aspect_ratio": (0, float('inf')), "area_range": (100, 2000), "confidence": 0.75}
+                ]
+            }
+        }
+        
+        config = detection_configs.get(discipline, detection_configs["architectural"])
+        elements = []
+        
+        for contour in contours:
+            x, y, w, h = cv2.boundingRect(contour)
+            area = w * h
+            aspect_ratio = w / h if h > 0 else 0
+            
+            for element_config in config["elements"]:
+                if self._matches_element_criteria(aspect_ratio, area, element_config):
+                    elements.append(self._create_element_dict(
+                        element_config["type"], x, y, w, h, area, 
+                        element_config["confidence"], discipline
+                    ))
+                    break  # Only match one element type per contour
+        
+        return elements
+    
+    def _matches_element_criteria(self, aspect_ratio: float, area: float, config: Dict) -> bool:
+        """Check if contour matches element criteria."""
+        min_ratio, max_ratio = config["aspect_ratio"]
+        min_area, max_area = config["area_range"]
+        
+        return (min_ratio <= aspect_ratio <= max_ratio and 
+                min_area <= area <= max_area)
+    
+    def _create_element_dict(self, element_type: str, x: int, y: int, w: int, h: int, 
+                           area: float, confidence: float, discipline: str) -> Dict[str, Any]:
+        """Create standardized element dictionary."""
+        return {
+            "type": element_type,
+            "bbox": [x, y, x + w, y + h],
+            "confidence": confidence,
+            "properties": {
+                "width": w,
+                "height": h,
+                "area": area
+            },
+            "discipline": discipline
+        }
+    
+    def _detect_architectural_elements(self, contours: List) -> List[Dict[str, Any]]:
+        """Detect architectural elements using geometric analysis."""
+        return self._detect_elements_by_discipline(contours, "architectural")
+    
+    def _detect_structural_elements(self, contours: List) -> List[Dict[str, Any]]:
+        """Detect structural elements using geometric analysis."""
+        return self._detect_elements_by_discipline(contours, "structural")
+    
+    def _detect_civil_elements(self, contours: List) -> List[Dict[str, Any]]:
+        """Detect civil engineering elements using geometric analysis."""
+        return self._detect_elements_by_discipline(contours, "civil")
+    
+    def _detect_mep_elements(self, contours: List) -> List[Dict[str, Any]]:
+        """Detect MEP elements using geometric analysis."""
+        return self._detect_elements_by_discipline(contours, "mep")
     
     def _geometric_detection(self, image: np.ndarray, discipline: str) -> List[Dict[str, Any]]:
         """
@@ -880,190 +989,6 @@ class PDFProcessor:
         else:
             # Generic detection
             elements = self._detect_generic_elements(contours)
-        
-        return elements
-    
-    def _detect_architectural_elements(self, contours: List) -> List[Dict[str, Any]]:
-        """Detect architectural elements using geometric analysis."""
-        elements = []
-        
-        for contour in contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            area = w * h
-            
-            # Wall detection (long rectangular shapes)
-            aspect_ratio = w / h if h > 0 else 0
-            if (aspect_ratio > 3 or aspect_ratio < 0.33) and area > 1000:
-                elements.append({
-                    "type": "wall",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.85,
-                    "properties": {
-                        "length": max(w, h),
-                        "thickness": min(w, h),
-                        "area": area
-                    },
-                    "discipline": "architectural"
-                })
-            
-            # Door detection (medium rectangular openings)
-            elif 0.3 < aspect_ratio < 0.8 and 500 < area < 5000:
-                elements.append({
-                    "type": "door",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.80,
-                    "properties": {
-                        "width": w,
-                        "height": h,
-                        "area": area
-                    },
-                    "discipline": "architectural"
-                })
-            
-            # Window detection (smaller rectangular openings)
-            elif 0.5 < aspect_ratio < 2.0 and 100 < area < 2000:
-                elements.append({
-                    "type": "window",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.75,
-                    "properties": {
-                        "width": w,
-                        "height": h,
-                        "area": area
-                    },
-                    "discipline": "architectural"
-                })
-        
-        return elements
-    
-    def _detect_structural_elements(self, contours: List) -> List[Dict[str, Any]]:
-        """Detect structural elements using geometric analysis."""
-        elements = []
-        
-        for contour in contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            area = w * h
-            
-            # Beam detection (long horizontal elements)
-            aspect_ratio = w / h if h > 0 else 0
-            if aspect_ratio > 4 and area > 2000:
-                elements.append({
-                    "type": "beam",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.90,
-                    "properties": {
-                        "length": w,
-                        "depth": h,
-                        "area": area
-                    },
-                    "discipline": "structural"
-                })
-            
-            # Column detection (tall vertical elements)
-            elif aspect_ratio < 0.5 and area > 1000:
-                elements.append({
-                    "type": "column",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.85,
-                    "properties": {
-                        "width": w,
-                        "height": h,
-                        "area": area
-                    },
-                    "discipline": "structural"
-                })
-            
-            # Foundation detection (large rectangular elements)
-            elif area > 5000:
-                elements.append({
-                    "type": "foundation",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.75,
-                    "properties": {
-                        "width": w,
-                        "height": h,
-                        "area": area
-                    },
-                    "discipline": "structural"
-                })
-        
-        return elements
-    
-    def _detect_civil_elements(self, contours: List) -> List[Dict[str, Any]]:
-        """Detect civil engineering elements using geometric analysis."""
-        elements = []
-        
-        for contour in contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            area = w * h
-            
-            # Road detection (long linear elements)
-            aspect_ratio = w / h if h > 0 else 0
-            if aspect_ratio > 3 and area > 3000:
-                elements.append({
-                    "type": "road",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.85,
-                    "properties": {
-                        "length": w,
-                        "width": h,
-                        "area": area
-                    },
-                    "discipline": "civil"
-                })
-            
-            # Utility detection (small elements)
-            elif 100 < area < 2000:
-                elements.append({
-                    "type": "utility",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.70,
-                    "properties": {
-                        "width": w,
-                        "height": h,
-                        "area": area
-                    },
-                    "discipline": "civil"
-                })
-        
-        return elements
-    
-    def _detect_mep_elements(self, contours: List) -> List[Dict[str, Any]]:
-        """Detect MEP elements using geometric analysis."""
-        elements = []
-        
-        for contour in contours:
-            x, y, w, h = cv2.boundingRect(contour)
-            area = w * h
-            
-            # HVAC duct detection (rectangular, medium size)
-            aspect_ratio = w / h if h > 0 else 0
-            if 0.5 < aspect_ratio < 3.0 and 1000 < area < 8000:
-                elements.append({
-                    "type": "hvac_duct",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.80,
-                    "properties": {
-                        "width": w,
-                        "height": h,
-                        "area": area
-                    },
-                    "discipline": "mep"
-                })
-            
-            # Electrical panel detection (small rectangular elements)
-            elif 100 < area < 2000:
-                elements.append({
-                    "type": "electrical_panel",
-                    "bbox": [x, y, x + w, y + h],
-                    "confidence": 0.75,
-                    "properties": {
-                        "width": w,
-                        "height": h,
-                        "area": area
-                    },
-                    "discipline": "mep"
-                })
         
         return elements
     

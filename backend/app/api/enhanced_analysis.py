@@ -258,65 +258,134 @@ async def batch_enhanced_analysis_project(project_id: int, analysis_request: dic
         if not drawing_ids:
             raise HTTPException(status_code=400, detail="No drawing IDs provided")
         
-        # Get specific drawings
-        drawings = db.query(Drawing).filter(
-            Drawing.id.in_(drawing_ids),
-            Drawing.project_id == project_id
-        ).all()
+        drawings = _get_drawings_for_analysis(project_id, drawing_ids, db)
+        processor = _initialize_processor()
+        processing_results = _process_drawings_batch(drawings, project_id, processor)
         
-        if not drawings:
-            raise HTTPException(status_code=404, detail="No drawings found")
+        return _create_batch_response(
+            project_id, drawings, processing_results, 
+            enable_cross_references, enable_notes_analysis
+        )
         
-        # Initialize processor
-        processor = PDFProcessor()
-        
-        # Process each drawing with enhanced analysis
-        results = []
-        cross_references_count = 0
-        notes_analyzed_count = 0
-        
-        for drawing in drawings:
-            try:
-                drawing_path = f"uploads/{project_id}/{drawing.filename}"
-                if os.path.exists(drawing_path):
-                    result = processor.process_drawing_with_cross_references(
-                        drawing.id, drawing_path, drawing.discipline or "architectural"
-                    )
-                    
-                    if result['status'] == 'success':
-                        results.append(result)
-                        
-                        # Count cross-references and notes
-                        if 'cross_references' in result:
-                            cross_references_count += len(result['cross_references'])
-                        if 'notes_report' in result:
-                            notes_analyzed_count += 1
-                    else:
-                        results.append({
-                            "drawing_id": drawing.id,
-                            "error": result.get('message', 'Unknown error'),
-                            "status": "failed"
-                        })
-                        
-            except Exception as e:
-                logger.error(f"Error processing drawing {drawing.id}: {e}")
-                results.append({
-                    "drawing_id": drawing.id,
-                    "error": str(e),
-                    "status": "failed"
-                })
-        
-        return {
-            "project_id": project_id,
-            "total_drawings": len(drawings),
-            "processed_drawings": len(results),
-            "cross_references_count": cross_references_count,
-            "notes_analyzed_count": notes_analyzed_count,
-            "enable_cross_references": enable_cross_references,
-            "enable_notes_analysis": enable_notes_analysis,
-            "results": results
-        }
-        
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error in batch enhanced project analysis: {e}")
-        raise HTTPException(status_code=500, detail=str(e)) 
+        logger.error(f"Error in batch enhanced project analysis: {e}", exc_info=True)
+        raise HTTPException(status_code=500, detail=f"Batch analysis failed: {str(e)}")
+
+def _get_drawings_for_analysis(project_id: int, drawing_ids: List[int], db: Session) -> List[Drawing]:
+    """Get drawings for batch analysis with validation."""
+    drawings = db.query(Drawing).filter(
+        Drawing.id.in_(drawing_ids),
+        Drawing.project_id == project_id
+    ).all()
+    
+    if not drawings:
+        raise HTTPException(status_code=404, detail="No drawings found")
+    
+    return drawings
+
+def _initialize_processor() -> PDFProcessor:
+    """Initialize PDF processor with error handling."""
+    try:
+        return PDFProcessor()
+    except Exception as e:
+        logger.error(f"Failed to initialize PDF processor: {e}")
+        raise HTTPException(status_code=500, detail=f"Failed to initialize processor: {str(e)}")
+
+def _process_drawings_batch(drawings: List[Drawing], project_id: int, processor: PDFProcessor) -> List[Dict]:
+    """Process all drawings in batch with progress tracking."""
+    processing_results = []
+    successful_count = 0
+    failed_count = 0
+    
+    for drawing_index, drawing in enumerate(drawings):
+        logger.info(f"Processing drawing {drawing.id} ({drawing_index + 1}/{len(drawings)})")
+        
+        result = _process_single_drawing(drawing, project_id, processor)
+        processing_results.append(result)
+        
+        if result["status"] == "success":
+            successful_count += 1
+        else:
+            failed_count += 1
+    
+    logger.info(f"Batch processing completed: {successful_count}/{len(drawings)} successful")
+    return processing_results
+
+def _process_single_drawing(drawing: Drawing, project_id: int, processor: PDFProcessor) -> Dict:
+    """Process a single drawing with comprehensive error handling."""
+    drawing_path = f"uploads/{project_id}/{drawing.filename}"
+    
+    # Check if file exists
+    if not os.path.exists(drawing_path):
+        logger.warning(f"Drawing file not found: {drawing_path}")
+        return _create_failed_result(drawing, "File not found")
+    
+    # Process drawing with error handling
+    try:
+        result = processor.process_drawing_with_cross_references(
+            drawing.id, drawing_path, drawing.discipline or "architectural"
+        )
+        
+        if result.get('status') == 'success':
+            logger.info(f"Successfully processed drawing {drawing.id}")
+            return result
+        else:
+            error_message = result.get('message', 'Unknown error')
+            logger.error(f"Failed to process drawing {drawing.id}: {error_message}")
+            return _create_failed_result(drawing, error_message)
+            
+    except Exception as e:
+        logger.error(f"Exception processing drawing {drawing.id}: {e}")
+        return _create_failed_result(drawing, str(e))
+
+def _create_failed_result(drawing: Drawing, error_message: str) -> Dict:
+    """Create a standardized failed result dictionary."""
+    return {
+        "drawing_id": drawing.id,
+        "filename": drawing.filename,
+        "error": error_message,
+        "status": "failed"
+    }
+
+def _create_batch_response(project_id: int, drawings: List[Drawing], 
+                         processing_results: List[Dict], enable_cross_references: bool, 
+                         enable_notes_analysis: bool) -> Dict:
+    """Create the final batch response with statistics."""
+    total_drawings = len(drawings)
+    successful_results = [r for r in processing_results if r.get('status') == 'success']
+    failed_results = [r for r in processing_results if r.get('status') == 'failed']
+    
+    # Calculate statistics
+    successful_count = len(successful_results)
+    failed_count = len(failed_results)
+    success_rate = (successful_count / total_drawings * 100) if total_drawings > 0 else 0
+    
+    # Count cross-references and notes
+    cross_references_count = sum(
+        len(r.get('cross_references', [])) for r in successful_results
+    )
+    notes_analyzed_count = sum(
+        1 for r in successful_results if 'notes_report' in r
+    )
+    
+    return {
+        "project_id": project_id,
+        "total_drawings": total_drawings,
+        "processed_drawings": len(processing_results),
+        "successful_processing": successful_count,
+        "failed_processing": failed_count,
+        "success_rate": success_rate,
+        "cross_references_count": cross_references_count,
+        "notes_analyzed_count": notes_analyzed_count,
+        "enable_cross_references": enable_cross_references,
+        "enable_notes_analysis": enable_notes_analysis,
+        "processing_summary": {
+            "total": total_drawings,
+            "successful": successful_count,
+            "failed": failed_count,
+            "success_rate_percentage": success_rate
+        },
+        "results": processing_results
+    } 

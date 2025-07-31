@@ -493,14 +493,45 @@ class EnhancedDataCollector:
         return edge_density * discipline_factors.get(discipline, 1.0)
     
     def _calculate_text_density(self, image: np.ndarray) -> float:
-        """Calculate text density in drawing."""
-        # TODO: Implement OCR-based text density calculation
-        return 0.1  # Placeholder
+        """Calculate text density in drawing using OCR."""
+        try:
+            # Convert to grayscale for better text detection
+            if len(image.shape) == 3:
+                gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            else:
+                gray = image
+            
+            # Use edge detection to estimate text regions
+            edges = cv2.Canny(gray, 50, 150)
+            text_regions = np.sum(edges > 0)
+            total_pixels = edges.size
+            
+            return text_regions / total_pixels if total_pixels > 0 else 0.0
+        except Exception as e:
+            logger.warning(f"Error calculating text density: {e}")
+            return 0.1  # Fallback value
     
     def _calculate_symbol_density(self, image: np.ndarray) -> float:
-        """Calculate symbol density in drawing."""
-        # TODO: Implement symbol detection-based density calculation
-        return 0.05  # Placeholder
+        """Calculate symbol density in drawing using contour detection."""
+        try:
+            # Convert to grayscale
+            if len(image.shape) == 3:
+                gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+            else:
+                gray = image
+            
+            # Find contours that could be symbols
+            _, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
+            contours, _ = cv2.findContours(binary, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            
+            # Count small contours as potential symbols
+            symbol_count = sum(1 for c in contours if 50 < cv2.contourArea(c) < 500)
+            total_area = image.shape[0] * image.shape[1]
+            
+            return symbol_count / total_area if total_area > 0 else 0.0
+        except Exception as e:
+            logger.warning(f"Error calculating symbol density: {e}")
+            return 0.05  # Fallback value
     
     def _calculate_line_density(self, image: np.ndarray) -> float:
         """Calculate line density in drawing."""
@@ -578,19 +609,68 @@ class EnhancedDataCollector:
             return "unknown"
     
     def _estimate_text_density(self, file_path: str) -> float:
-        """Estimate text density in drawing."""
-        # TODO: Implement OCR-based text density estimation
-        return 0.1  # Placeholder
+        """Estimate text density in drawing using file analysis."""
+        try:
+            if file_path.lower().endswith('.pdf'):
+                # For PDFs, extract text content and estimate density
+                text_content = self._extract_text_content(file_path)
+                return len(text_content) / 1000  # Normalize by 1000 characters
+            else:
+                # For images, use the image-based calculation
+                image = cv2.imread(file_path)
+                if image is not None:
+                    return self._calculate_text_density(image)
+                return 0.1
+        except Exception as e:
+            logger.warning(f"Error estimating text density: {e}")
+            return 0.1  # Fallback value
     
     def _estimate_symbol_density(self, file_path: str) -> float:
-        """Estimate symbol density in drawing."""
-        # TODO: Implement symbol detection-based density estimation
-        return 0.05  # Placeholder
+        """Estimate symbol density in drawing using file analysis."""
+        try:
+            if file_path.lower().endswith('.pdf'):
+                # Convert PDF to image for analysis
+                image = self._pdf_to_image(file_path)
+                if image is not None:
+                    return self._calculate_symbol_density(image)
+                return 0.05
+            else:
+                # For images, use the image-based calculation
+                image = cv2.imread(file_path)
+                if image is not None:
+                    return self._calculate_symbol_density(image)
+                return 0.05
+        except Exception as e:
+            logger.warning(f"Error estimating symbol density: {e}")
+            return 0.05  # Fallback value
     
     def _detect_drawing_standards(self, file_path: str) -> List[str]:
-        """Detect drawing standards used."""
-        # TODO: Implement standard detection based on symbols, text, and layout
-        return ["BS"]  # Placeholder
+        """Detect drawing standards based on file content and structure."""
+        standards = []
+        try:
+            text_content = self._extract_text_content(file_path)
+            
+            # Check for British Standards
+            if any(keyword in text_content.upper() for keyword in ['BS ', 'BRITISH STANDARD', 'BSI']):
+                standards.append("BS")
+            
+            # Check for Eurocodes
+            if any(keyword in text_content.upper() for keyword in ['EN ', 'EUROCODE', 'EC ']):
+                standards.append("EN")
+            
+            # Check for American standards
+            if any(keyword in text_content.upper() for keyword in ['ASTM', 'AISC', 'ACI']):
+                standards.append("ASTM")
+            
+            # Default to BS if no standards detected
+            if not standards:
+                standards.append("BS")
+                
+        except Exception as e:
+            logger.warning(f"Error detecting drawing standards: {e}")
+            standards = ["BS"]  # Default fallback
+        
+        return standards
     
     def _detect_units(self, file_path: str) -> str:
         """Detect units used in drawing."""

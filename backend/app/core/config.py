@@ -28,7 +28,17 @@ class Settings(BaseSettings):
     confidence_threshold: float = 0.7
     
     # API settings
-    cors_origins: list = ["http://localhost:3000", "http://localhost:3001", "http://localhost:3002", "http://127.0.0.1:3000", "http://127.0.0.1:3001", "http://127.0.0.1:3002"]
+    cors_origins: list = [
+        "http://localhost:3000", 
+        "http://localhost:3001", 
+        "http://localhost:3002", 
+        "http://127.0.0.1:3000", 
+        "http://127.0.0.1:3001", 
+        "http://127.0.0.1:3002",
+        "http://localhost:3000/",
+        "http://127.0.0.1:3000/",
+        "*"  # Allow all origins for development
+    ]
     
     class Config:
         env_file = ".env"

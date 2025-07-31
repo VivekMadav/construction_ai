@@ -20,6 +20,7 @@ pillow>=10.0.0
 # PDF processing
 pypdf2>=3.0.0
 pdf2image>=1.16.0
+PyMuPDF>=1.23.0
 
 # Data processing
 pandas>=2.1.0
@@ -46,4 +47,7 @@ requests>=2.31.0
 structlog>=23.2.0
 
 # CORS
-fastapi-cors>=0.0.6 
+fastapi-cors>=0.0.6
+
+# Additional utilities
+python-magic>=0.4.27 

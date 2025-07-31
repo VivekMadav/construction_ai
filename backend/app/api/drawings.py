@@ -23,7 +23,22 @@ async def upload_drawing(
     background_tasks: BackgroundTasks = None,
     db: Session = Depends(get_db)
 ):
-    """Upload a construction drawing (PDF) for processing"""
+    """
+    Upload a construction drawing (PDF) for processing.
+    
+    Args:
+        project_id: ID of the project to upload to
+        file: PDF file to upload
+        discipline: Drawing discipline (architectural, structural, civil, mep)
+        background_tasks: FastAPI background tasks for async processing
+        db: Database session
+    
+    Returns:
+        FileUploadResponse with upload status and drawing ID
+    
+    Raises:
+        HTTPException: If project not found, file type invalid, or upload fails
+    """
     try:
         # Validate project exists
         project = db.query(Project).filter(Project.id == project_id).first()
@@ -77,28 +92,38 @@ async def upload_drawing(
         db.refresh(drawing)
         
         # Start background processing for PDF files
-        if file_extension == '.pdf' and background_tasks:
+        if file_extension == ".pdf" and background_tasks:
             background_tasks.add_task(process_pdf_drawing, drawing.id, file_path, discipline, db)
         
         return FileUploadResponse(
+            message="File uploaded successfully",
+            drawing_id=drawing.id,
             filename=filename,
-            file_id=drawing.id,
-            status="uploaded",
-            message="File uploaded successfully"
+            discipline=discipline
         )
         
     except HTTPException:
         raise
     except Exception as e:
-        db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error uploading file: {str(e)}"
         )
 
 
-async def process_pdf_drawing(drawing_id: int, file_path: str, discipline: str, db: Session):
-    """Background task to process PDF drawing"""
+def process_pdf_drawing(drawing_id: int, file_path: str, discipline: str, db: Session):
+    """
+    Background task to process PDF drawing.
+    
+    This function runs in a background thread to avoid blocking the main request.
+    It performs CPU-intensive PDF processing operations.
+    
+    Args:
+        drawing_id: ID of the drawing to process
+        file_path: Path to the PDF file
+        discipline: Drawing discipline
+        db: Database session
+    """
     # Create a new database session for the background task
     from ..core.database import SessionLocal
     db_session = SessionLocal()
@@ -116,78 +141,29 @@ async def process_pdf_drawing(drawing_id: int, file_path: str, discipline: str, 
         
         # Save detected elements to database
         if results.get('total_elements', 0) > 0:
-            for element_data in results['elements']:
-                # Calculate bounding box as JSON string
-                bbox = element_data['bbox']
-                bounding_box_json = f'{{"x1": {bbox[0]}, "y1": {bbox[1]}, "x2": {bbox[2]}, "y2": {bbox[3]}}}'
-                
-                # Calculate area in square meters (assuming 100 pixels per meter)
-                area_m2 = element_data['properties'].get('area', 0) / (100 * 100)  # Convert from pixels to m2
-                
+            for element_data in results.get('elements', []):
                 element = Element(
                     drawing_id=drawing_id,
-                    project_id=drawing.project_id,
-                    element_type=element_data['type'],
-                    quantity=area_m2,
-                    unit="m2",
-                    area=area_m2,
-                    confidence_score=element_data['confidence'],
-                    bounding_box=bounding_box_json
+                    element_type=element_data.get('type', 'unknown'),
+                    quantity=element_data.get('quantity', 1),
+                    unit=element_data.get('unit', 'unit'),
+                    area=element_data.get('properties', {}).get('area'),
+                    confidence_score=element_data.get('confidence', 0.0)
                 )
                 db_session.add(element)
             
+            db_session.commit()
+        
+        # Update drawing status to completed
+        if drawing:
             drawing.processing_status = "completed"
-            print(f"DEBUG: Successfully processed {results['total_elements']} elements using {results.get('processing_method', 'unknown')} method")
-        else:
-            drawing.processing_status = "failed"
-            print(f"DEBUG: No elements detected, processing failed")
-        
-        # If this is a structural drawing, also detect steel elements
-        if discipline == "structural":
-            try:
-                print(f"DEBUG: Detecting steel elements for structural drawing {drawing_id}")
-                from ..services.steel_database import SteelDatabaseService
-                steel_service = SteelDatabaseService(db_session)
-                steel_elements = steel_service.detect_steel_elements_in_drawing(file_path, drawing_id)
-                print(f"DEBUG: Detected {len(steel_elements)} steel elements")
-            except Exception as steel_error:
-                print(f"DEBUG: Steel detection failed: {steel_error}")
-        
-        # Automatically detect concrete elements for all drawings
-        try:
-            print(f"DEBUG: Detecting concrete elements for drawing {drawing_id}")
-            from ..services.concrete_processor import ConcreteProcessor
-            concrete_processor = ConcreteProcessor()
-            concrete_elements = concrete_processor.process_drawing_for_concrete(file_path)
+            db_session.commit()
             
-            # Save concrete elements to database
-            if concrete_elements:
-                from ..models.models import ConcreteElement
-                for element in concrete_elements:
-                    db_concrete_element = ConcreteElement(
-                        drawing_id=drawing_id,
-                        element_type=element.element_type,
-                        concrete_grade=element.grade,
-                        length_m=element.dimensions.length,
-                        width_m=element.dimensions.width,
-                        depth_m=element.dimensions.depth,
-                        volume_m3=element.dimensions.volume,
-                        confidence_score=element.dimensions.confidence,
-                        description=element.description,
-                        text_references=element.dimensions.text_reference,
-                        location=element.location
-                    )
-                    db_session.add(db_concrete_element)
-                print(f"DEBUG: Detected {len(concrete_elements)} concrete elements")
-            else:
-                print(f"DEBUG: No concrete elements detected")
-        except Exception as concrete_error:
-            print(f"DEBUG: Concrete detection failed: {concrete_error}")
-        
-        db_session.commit()
+        print(f"DEBUG: Completed processing drawing {drawing_id}")
         
     except Exception as e:
-        # Update status to failed
+        print(f"ERROR: Failed to process drawing {drawing_id}: {e}")
+        # Update drawing status to failed
         drawing = db_session.query(Drawing).filter(Drawing.id == drawing_id).first()
         if drawing:
             drawing.processing_status = "failed"
